@@ -12,12 +12,25 @@ To fire it up, call Character.new with the cicuid from that URL:
 
 Stuff you can do:
 
-  char.skills.list => Array of all skills that have been leveled (ie rank 0 jobs omitted)
-  char.skills.pugilist (or any class name) => The skill, regardless of if its been leveled or not
-                        (ie you can explicitly ask for a skill to see if it's been leveled or not)
+  char.skills => SkillList with these methods:
+    .list => Array of all skills that have been leveled (ie rank 0 jobs omitted)
+    .pugilist (or any class name) => The skill, regardless of if its been leveled or not
+              (ie you can explicitly ask for a skill to see if it's been leveled or not)
+
+  chat.resistances => StatList (same deal as stats but with fire instead of strength, 
+                      see method list below)
+  char.stats => StatList with these methods:
+    .each {} => Does some iteration
+    .strength (or any stat name) => Integer value of the state
 
 A skill object has these methods: 
   name, skill_name, rank, skillpoint_to_next_level, current_skill_points
+
+== TODO ==
+* Error handling (if you put in a crap char ID you'll get some cryptic Nokogiri errors)
+* Figure out what the fuck the stats in parenthesis mean and do something with them.
+  * Currently, these are dropped on the floor because I don't know what they mean. The current
+    theories include 'Base (with gear)' and 'Stat (with buffs)'.
 
 == Author, License, Etc ==
 Copyright owlmanatt <owlmanatt@gmail.com> 2010. The library is free to use, modify, redistribute, 

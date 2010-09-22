@@ -4,6 +4,28 @@ require 'open-uri'
 
 module FFXIVLodestone
   class Character
+    class StatList
+      include Enumerable 
+      attr_reader :stats
+
+      def initialize(table)
+        @stats = {}
+        
+        table.search('tr').each do |tr|
+          @stats[tr.children[0].content.strip.downcase.to_sym] = tr.children[2].content.gsub("\302\240",' ').split(' ')[0].to_i
+        end
+      end
+
+      def each
+        @stats.each {|stat| yield stat}
+      end
+
+      def method_missing(method)
+        return @stats[method] if @stats.key? method
+        super
+      end
+    end # StatList
+
     class SkillList
       class Skill
         attr_reader :name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level
@@ -84,21 +106,23 @@ module FFXIVLodestone
       
       def method_missing(method)
         return @skills[method] if @skills.key? method
-        
         super
       end
 
     end # FFXIVLodestone::Character::SkillList
 
-    attr_reader :skills
+    attr_reader :skills, :stats, :resistances
     def initialize(character_id)
       # TODO exception if ID isn't an integer
+      # TODO exception if we don't have a valid char ID
       @character_id = character_id
 
       doc = Nokogiri::HTML(open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{@character_id}", {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}))
 
       # The skills table doesn't have a unqiue ID or class to find it by, so take the first skill lable and go up two elements (table -> tr -> th.mianskill-lable)
       @skills = SkillList.new(doc.search('th.mainskill-label').first.parent.parent)
+      @stats = StatList.new(doc.search("div.contents-subheader[contains('Attributes')]").first.next_sibling.next_sibling)
+      @resistances = StatList.new(doc.search("div.contents-subheader[contains('Elements')]").first.next_sibling.next_sibling)
     end
 
   end # character
