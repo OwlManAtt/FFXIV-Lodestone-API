@@ -18,6 +18,8 @@ To fire it up, call Character.new with the cicuid from that URL:
 
 Stuff you can do:
 
+  char.to_json => String containing a JSON representation of the character / jobs.
+
   char.name, char.world, char.nameday, char.guardian, char.starting_city, char.physical_level,
   char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan
 
@@ -35,12 +37,19 @@ Stuff you can do:
 A skill object has these methods: 
   name, skill_name, rank, skillpoint_to_next_level, current_skill_points
 
+== FAQ ==
+Q. Hey, why doesn't this have HP / MP / TP? They're on the character profile page!
+A. Because those values change based on the currently equipped job. I don't think they're useful
+   pieces of data. If you have a use case for them, please let me know and I will include them.
+
 == TODO ==
 * Error handling (if you put in a crap char ID you'll get some cryptic Nokogiri errors)
 * Figure out what the fuck the stats in parenthesis mean and do something with them.
   * Currently, these are dropped on the floor because I don't know what they mean. The current
     theories include 'Base (with gear)' and 'Stat (with buffs)'.
 * Make SkillList implement enumerable.
+* Character search by name in the constructor. Pending Lodestone's character search not randomly
+  omitting people.
 
 == Author, License, Etc ==
 Copyright owlmanatt <owlmanatt@gmail.com> 2010. The library is free to use, modify, redistribute, 

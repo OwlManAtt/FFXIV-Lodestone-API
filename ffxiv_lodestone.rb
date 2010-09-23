@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
+require 'json'
 
 module FFXIVLodestone
   class Character
@@ -20,6 +21,10 @@ module FFXIVLodestone
         @stats.each {|stat| yield stat}
       end
 
+      def to_h
+        @stats
+      end
+
       def method_missing(method)
         return @stats[method] if @stats.key? method
         super
@@ -37,6 +42,10 @@ module FFXIVLodestone
           @current_skill_points = cur_sp
           @skillpoint_to_next_level = skillup_sp
         end # initalize
+
+        def to_h
+          {:name => @name, :skill_name => @skill_name, :rank => @rank, :current_skill_points => @current_skill_points, :skillpoint_to_next_level => @skillpoint_to_next_level}
+        end
       end # Skill
       
       # Alias the stupid names in Lodestone to class names. 
@@ -86,8 +95,8 @@ module FFXIVLodestone
             levelup_sp = 0
           else
             sp.gsub!("\302\240",'') # this is a &nbsp but it looks ugly in #inspect(), so remove it.
-            current_sp = sp.split('/')[0].strip
-            levelup_sp = sp.split('/')[1].strip
+            current_sp = sp.split('/')[0].strip.to_i
+            levelup_sp = sp.split('/')[1].strip.to_i
           end
 
           @skills[key] = Skill.new(job,name,rank,current_sp,levelup_sp)
@@ -100,6 +109,13 @@ module FFXIVLodestone
         @skills.each do |name,skill| 
           list << skill if skill.rank > 0
         end
+
+        return list
+      end
+
+      def to_h
+        list = {}
+        @skills.each {|job,data| list[job] = data.to_h}
 
         return list
       end
@@ -166,10 +182,19 @@ module FFXIVLodestone
       "#{@profile[:first_name]} #{@profile[:last_name]}"
     end
 
+    def to_json
+      data = {}
+      data.merge!(@profile)
+      data[:jobs] = @skills.to_h
+      data[:attributes] = @stats.to_h
+      data[:resistances] = @resistances.to_h
+
+      data.to_json
+    end
+
     def method_missing(method)
       return @profile[method] if @profile.key? method
       super
     end
-
   end # character
 end # end FFXIVLodestone
