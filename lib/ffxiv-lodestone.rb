@@ -4,6 +4,8 @@ require 'open-uri'
 require 'json'
 
 module FFXIVLodestone
+  VERSION = '0.7.0'
+
   class Character
     class StatList
       include Enumerable 
