@@ -1,23 +1,32 @@
-== Purpose ==
+== About ==
 This is a screen scraper for the FFXIV community side, Lodestone. It gets information about
-characters.
+characters. The Lodestone pages are a huge pile of shit, so this will save you a few hours of
+hating your life while you write a screen scraper.
+
+The aim is to not break if SquareEnix adds new pieces of data to the page. Any new attributes,
+skills, of general pieces of profile data should automatically be handled by this library.
+
+She ain't pretty, but it's decently robust. 
 
 == Usage ==
-Take, for example, this character: <http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=1015990>
+Take, for example, this character: <http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=1502635>
 
 To fire it up, call Character.new with the cicuid from that URL:
 
   require 'ffxiv_lodestone'
-  char = FFXIVLodestone::Character.new(1015990)
+  char = FFXIVLodestone::Character.new(1502635)
 
 Stuff you can do:
+
+  char.name, char.world, char.nameday, char.guardian, char.starting_city, char.physical_level,
+  char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan
 
   char.skills => SkillList with these methods:
     .list => Array of all skills that have been leveled (ie rank 0 jobs omitted)
     .pugilist (or any class name) => The skill, regardless of if its been leveled or not
               (ie you can explicitly ask for a skill to see if it's been leveled or not)
 
-  chat.resistances => StatList (same deal as stats but with fire instead of strength, 
+  char.resistances => StatList (same deal as stats but with fire instead of strength, 
                       see method list below)
   char.stats => StatList with these methods:
     .each {} => Does some iteration
@@ -31,6 +40,7 @@ A skill object has these methods:
 * Figure out what the fuck the stats in parenthesis mean and do something with them.
   * Currently, these are dropped on the floor because I don't know what they mean. The current
     theories include 'Base (with gear)' and 'Stat (with buffs)'.
+* Make SkillList implement enumerable.
 
 == Author, License, Etc ==
 Copyright owlmanatt <owlmanatt@gmail.com> 2010. The library is free to use, modify, redistribute, 

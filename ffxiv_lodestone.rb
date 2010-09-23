@@ -111,7 +111,7 @@ module FFXIVLodestone
 
     end # FFXIVLodestone::Character::SkillList
 
-    attr_reader :skills, :stats, :resistances
+    attr_reader :skills, :stats, :resistances, :profile
     def initialize(character_id)
       # TODO exception if ID isn't an integer
       # TODO exception if we don't have a valid char ID
@@ -123,6 +123,52 @@ module FFXIVLodestone
       @skills = SkillList.new(doc.search('th.mainskill-label').first.parent.parent)
       @stats = StatList.new(doc.search("div.contents-subheader[contains('Attributes')]").first.next_sibling.next_sibling)
       @resistances = StatList.new(doc.search("div.contents-subheader[contains('Elements')]").first.next_sibling.next_sibling)
+      
+      # The character info box at the top ... actually has a useful ID!
+      @profile = {}
+      profile = doc.search('#profile-plate2')
+      profile.search('tr th').each do |th|
+        key = th.content.strip.downcase.gsub(':','').gsub(' ','_').to_sym
+        value = th.next_sibling.next_sibling.content.strip.gsub("\302\240",'')
+
+        # HP/MP/TP are max values. They depend on the currently equipped job and are not very
+        # meaningful pieces of data. XP will be handled seperately. 
+        unless [:hp, :mp, :tp, :experience_points].include? key
+          @profile[key] = value 
+        end
+
+        if key == :experience_points
+          @profile[:current_exp] = value.split('/')[0].to_i
+          @profile[:exp_to_next_level] = value.split('/')[1].to_i
+        end
+      end
+      
+      # Fix this datatype.
+      @profile[:physical_level] = @profile[:physical_level].to_i
+      
+      # Parse the character name/world line...
+      name_line = profile.search('#charname').first.content.gsub(')','').strip.split(' (')
+      @profile[:world] = name_line[1]
+      @profile[:first_name] = name_line[0].split(' ')[0]
+      @profile[:last_name] = name_line[0].split(' ')[1]
+
+      # Parse the "Seeker of the Sun Female / Miqo'te" line... fun~
+      race_line = profile.search('tr td').first.content.strip.gsub("\302\240",' ').split(' / ')
+      @profile[:race] = race_line.pop
+
+      # horrible array splitting and popping trix. hidoi hidoi!
+      race_line = race_line.first.split ' '
+      @profile[:gender] = race_line.pop
+      @profile[:clan] = race_line.join ' '
+    end
+    
+    def name
+      "#{@profile[:first_name]} #{@profile[:last_name]}"
+    end
+
+    def method_missing(method)
+      return @profile[method] if @profile.key? method
+      super
     end
 
   end # character
