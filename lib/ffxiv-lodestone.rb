@@ -4,9 +4,12 @@ require 'open-uri'
 require 'json'
 
 module FFXIVLodestone
-  VERSION = '0.7.0'
+  VERSION = '0.8.0'
 
   class Character
+    class NotFoundException < RuntimeError 
+    end
+
     class StatList
       include Enumerable 
       attr_reader :stats
@@ -131,11 +134,14 @@ module FFXIVLodestone
 
     attr_reader :skills, :stats, :resistances, :profile
     def initialize(character_id)
-      # TODO exception if ID isn't an integer
-      # TODO exception if we don't have a valid char ID
       @character_id = character_id
 
       doc = Nokogiri::HTML(open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{@character_id}", {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}))
+
+      # Did we get an error page? Invalid ID, etc.
+      if !((doc.search('head title').first.content.match /error/i) == nil)
+        raise NotFoundException, 'Bad character ID or Lodestone is broken.' 
+      end
 
       # The skills table doesn't have a unqiue ID or class to find it by, so take the first skill lable and go up two elements (table -> tr -> th.mianskill-lable)
       @skills = SkillList.new(doc.search('th.mainskill-label').first.parent.parent)
