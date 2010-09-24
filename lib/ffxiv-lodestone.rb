@@ -10,29 +10,15 @@ module FFXIVLodestone
     class NotFoundException < RuntimeError 
     end
 
-    class StatList
-      include Enumerable 
-      attr_reader :stats
-
+    class StatList < Hash
       def initialize(table)
-        @stats = {}
-        
         table.search('tr').each do |tr|
-          @stats[tr.children[0].content.strip.downcase.to_sym] = tr.children[2].content.gsub("\302\240",' ').split(' ')[0].to_i
+          self[tr.children[0].content.strip.downcase.to_sym] = tr.children[2].content.gsub("\302\240",' ').split(' ')[0].to_i
         end
       end
 
-      def each
-        @stats.each {|stat| yield stat}
-      end
-
-      def to_h
-        @stats
-      end
-
-      def method_missing(method)
-        return @stats[method] if @stats.key? method
-        super
+      def stats
+	      self
       end
     end # StatList
 
