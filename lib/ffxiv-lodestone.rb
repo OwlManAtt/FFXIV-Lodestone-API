@@ -32,8 +32,9 @@ module FFXIVLodestone
         end
       end
 
-      def stats
-	      self
+      def method_missing(method)
+        return self[method] if self.key? method
+        super
       end
     end # StatList
 
@@ -51,9 +52,9 @@ module FFXIVLodestone
           @skillpoint_to_next_level = skillup_sp
         end # initalize
 
-	def serialize_properties
-		[:name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level]
-	end
+        def serialize_properties
+          [:name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level]
+        end
       end # Skill
       
       # Alias the stupid names in Lodestone to class names. 
@@ -197,8 +198,8 @@ module FFXIVLodestone
       data = {}
       data.merge!(@profile)
       data[:jobs] = @skills.to_h
-      data[:attributes] = @stats.to_h
-      data[:resistances] = @resistances.to_h
+      data[:attributes] = @stats
+      data[:resistances] = @resistances
 
       data.to_json
     end
@@ -209,7 +210,6 @@ module FFXIVLodestone
     end
 
     protected 
-
     # This method can be redefined in a test class.
     def get_html(id)
       open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{id}", {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'})

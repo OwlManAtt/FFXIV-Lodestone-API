@@ -35,8 +35,11 @@ describe 'Character(1015990)' do
     stats = {:strength => 16, :vitality => 24, :dexterity => 17, :intelligence => 36, :mind => 37, :piety => 28}
     resists = {:fire => 28, :water => 29, :lightning => 30, :wind => 30, :earth => 25, :ice => 15}
     
-    @char.stats.to_h.should.equal stats
-    @char.resistances.to_h.should.equal resists 
+    @char.stats.should.equal stats
+    @char.stats.strength.should.equal 16
+
+    @char.resistances.should.equal resists 
+    @char.resistances.fire.should.equal 28
   end
 
   it 'should have job data' do
