@@ -3,23 +3,23 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
-module Serializable
-	def to_yaml_properties
-		serialize_properties.map {|sym| "@%s" % sym }
-	end
-	def to_hash
-		serialize_properties.reduce(Hash.new) {|h,sym|
-			h[sym] = self.send(sym)
-			h
-		}
-	end
-	def to_h
-		to_hash
-	end
-end
-
 module FFXIVLodestone
   VERSION = '0.8.0'
+
+  module Serializable
+    def to_yaml_properties
+      serialize_properties.map {|sym| "@%s" % sym }
+    end
+    def to_hash
+      serialize_properties.reduce(Hash.new) {|h,sym|
+        h[sym] = self.send(sym)
+        h
+      }
+    end
+    def to_h
+      to_hash
+    end
+  end
 
   class Character
     class NotFoundException < RuntimeError 
