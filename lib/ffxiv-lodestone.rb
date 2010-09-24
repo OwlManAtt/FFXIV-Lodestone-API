@@ -3,6 +3,21 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
+module Serializable
+	def to_yaml_properties
+		serialize_properties.map {|sym| "@%s" % sym }
+	end
+	def to_hash
+		serialize_properties.reduce(Hash.new) {|h,sym|
+			h[sym] = self.send(sym)
+			h
+		}
+	end
+	def to_h
+		to_hash
+	end
+end
+
 module FFXIVLodestone
   VERSION = '0.8.0'
 
@@ -24,6 +39,8 @@ module FFXIVLodestone
 
     class SkillList
       class Skill
+        include Serializable
+
         attr_reader :name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level
 
         def initialize(job,skill_name,rank,cur_sp,skillup_sp)
@@ -34,9 +51,9 @@ module FFXIVLodestone
           @skillpoint_to_next_level = skillup_sp
         end # initalize
 
-        def to_h
-          {:name => @name, :skill_name => @skill_name, :rank => @rank, :current_skill_points => @current_skill_points, :skillpoint_to_next_level => @skillpoint_to_next_level}
-        end
+	def serialize_properties
+		[:name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level]
+	end
       end # Skill
       
       # Alias the stupid names in Lodestone to class names. 
