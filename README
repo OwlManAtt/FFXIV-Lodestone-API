@@ -13,24 +13,45 @@ It's easy:
 
   $ gem install ffxiv-lodestone
 
-You can optinally install the json (pure or extension) gem to enable character.to_json.
+You will need to install the json (pure or extension) gem too. This isn't a dependency because I
+don't know of a way to specify an either-or (json-pure or json the native extension) dependency.
 
 == Usage ==
 Take, for example, this character: <http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=1502635>
 
-To fire it up, call Character.new with the cicuid from that URL:
+In its most simplistic instantiation, Character.new with the cicuid from that URL:
 
   require 'rubygems'
   require 'ffxiv-lodestone'
   char = FFXIVLodestone::Character.new(1502635)
 
+However, you can also search by name and world. If you're doing name/world, you MUST specify both
+of these options of you will get an exception.
+
+  char = FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom', :world => 'Figaro')
+
+:siren: THERE ARE A NUMBER OF CAVEATS INVOLVED IN LOADING-BY-NAME :siren:
+
+  1. This involves two HTTP GETs - one for the search page, and one for the profile page. If you
+     are integrating this in to forums or something, you ought to store the character_id number after
+     your first search and use that for subsequent requests.
+
+  2. Lodestone's character search is slow to index new characters. It took about a day for my
+     character to show up.
+
+  3. Character search has no way of specifying that you want to search for an exact name. If you
+     look up a character with a simple name, like 'Ab Lo', you get multiple search results. In the
+     event that the search has more than one result, an AmbiguousNameError will be raised. You will
+     have to request that character by the ID.
+
+== Ghetto API Doc ==
 Stuff you can do:
 
   char.to_json => String containing a JSON representation of the character / jobs.
   char.to_yaml => YAML representation of the character (EXPERIMENTAL).
 
   char.name, char.world, char.nameday, char.guardian, char.starting_city, char.physical_level,
-  char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan
+  char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan, char.character_id
 
   char.skills => SkillList with these methods:
     .levelled => Array of all skills that have been leveled (ie rank 0 jobs omitted)
@@ -61,7 +82,4 @@ If you want to fool around with the source code, you can see if you've fucked ev
 * Figure out what the fuck the stats in parenthesis mean and do something with them.
   * Currently, these are dropped on the floor because I don't know what they mean. The current
     theories include 'Base (with gear)' and 'Stat (with buffs)'.
-* Make SkillList implement enumerable.
-* Character search by name in the constructor. Pending Lodestone's character search not randomly
-  omitting people.
-* RDoc shit.
+* Get the portrait URL & biography field (if present).

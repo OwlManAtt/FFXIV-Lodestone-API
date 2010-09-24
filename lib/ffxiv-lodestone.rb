@@ -4,7 +4,39 @@ require 'open-uri'
 require 'json'
 
 module FFXIVLodestone
+  # Gem version.
   VERSION = '0.9.0'
+
+  # Accept-language must be sent; their default is Japanese text.
+  HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}
+  
+  # Search page server IDs.
+  SERVER_SEARCH_INDEXES = {:cornelia => 2, :kashuan => 3, :gysahl => 4, :mysidia => 5, 
+  :istory => 6, :figaro => 7, :wutai => 8, :trabia => 9, :lindblum => 10, :besaid => 11,
+  :selbina => 12, :rabanastre => 13, :bodhum => 14, :melmond => 15, :palamecia => 16,
+  :saronia => 17, :fabul => 18}
+  
+  # Alias the stupid names in Lodestone to class names. 
+  SKILL_TO_CLASS = {
+    'Hand-to-Hand' => :pugilist,
+    'Sword' => :gladiator,
+    'Axe' => :marauder,
+    'Archery' => :archer,
+    'Polearm' => :lancer,
+    'Thaumaturgy' => :thaumaturge,
+    'Conjury' => :conjurer,
+    'Woodworking' => :carpenter,
+    'Smithing' => :blacksmith,
+    'Armorcraft' => :armorer,
+    'Goldsmithing' => :goldsmith,
+    'Leatherworking' => :leatherworker,
+    'Clothcraft' => :weaver,
+    'Alchemy' => :alchemist,
+    'Cooking' => :culinarian,
+    'Mining' => :miner,
+    'Botany' => :botanist,
+    'Fishing' => :fisher,
+  }
 
   module Serializable
     def to_yaml_properties
@@ -32,6 +64,9 @@ module FFXIVLodestone
   #   FFXIVLodestone::Character.new(1015990)
   class Character
     class NotFoundException < RuntimeError 
+    end
+
+    class AmbiguousNameError < RuntimeError
     end
 
     class StatList < Hash
@@ -65,35 +100,13 @@ module FFXIVLodestone
         end
       end # Skill
       
-      # Alias the stupid names in Lodestone to class names. 
-      SKILL_TO_CLASS = {
-        'Hand-to-Hand' => :pugilist,
-        'Sword' => :gladiator,
-        'Axe' => :marauder,
-        'Archery' => :archer,
-        'Polearm' => :lancer,
-        'Thaumaturgy' => :thaumaturge,
-        'Conjury' => :conjurer,
-        'Woodworking' => :carpenter,
-        'Smithing' => :blacksmith,
-        'Armorcraft' => :armorer,
-        'Goldsmithing' => :goldsmith,
-        'Leatherworking' => :leatherworker,
-        'Clothcraft' => :weaver,
-        'Alchemy' => :alchemist,
-        'Cooking' => :culinarian,
-        'Mining' => :miner,
-        'Botany' => :botanist,
-        'Fishing' => :fisher,
-      }
-
       def initialize(skill_table)
         @skills = {}
 
         skill_table.children.each do |skill|
           name = skill.children[0].children[1].content
-          if SKILL_TO_CLASS.key? name
-            key = SKILL_TO_CLASS[name]
+          if FFXIVLodestone::SKILL_TO_CLASS.key? name
+            key = FFXIVLodestone::SKILL_TO_CLASS[name]
             job = key.to_s.capitalize
           else
             key = name.gsub('-', '_').downcase.to_sym
@@ -135,10 +148,25 @@ module FFXIVLodestone
     end # FFXIVLodestone::Character::SkillList
 
     attr_reader :skills, :stats, :resistances, :profile
-    def initialize(character_id)
-      @character_id = character_id
+    def initialize(args={})
+      unless args.class == Hash
+        character_id = args
+      else
+        if args.key? :id
+          character_id = args[:id]
 
-      doc = Nokogiri::HTML(get_html(@character_id))
+          raise ArgumentError, 'No other arguments may be specified in conjunction with :id.' if args.size > 1
+        else
+          if args.key? :name and args.key? :world
+            character_id = determine_character_id(args[:name],args[:world])
+          else
+            raise ArgumentError, 'Neither :id or :name && :world have been specified.'
+          end
+        end
+      end
+      
+      @character_id = character_id
+      doc = Nokogiri::HTML(get_profile_html(@character_id))
 
       # Did we get an error page? Invalid ID, etc.
       if !((doc.search('head title').first.content.match /error/i) == nil)
@@ -186,6 +214,8 @@ module FFXIVLodestone
       race_line = race_line.first.split ' '
       @profile[:gender] = race_line.pop
       @profile[:clan] = race_line.join ' '
+
+      @profile[:character_id] = @character_id.to_i
     end
     
     # Returns first name / last name seperated by a space.
@@ -210,8 +240,32 @@ module FFXIVLodestone
 
     protected 
     # This method can be redefined in a test class.
-    def get_html(id)
-      open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{id}", {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'})
+    def get_profile_html(id)
+      open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{id}", FFXIVLodestone::HTTP_OPTIONS)
+    end
+
+    # Another method to redefine in the test file...
+    def get_search_html(name,world_id)
+      open(URI.encode("http://lodestone.finalfantasyxiv.com/rc/search/search?tgt=77&q=#{name}&cw=#{world_id}"), FFXIVLodestone::HTTP_OPTIONS)
+    end
+
+    def determine_character_id(name,world)
+      # TODO This should be more robust ... somehow. The search page uses indexes assigned in 
+      # a dropdown and I just copied them in to a constant. It's going to fuck up if they 
+      # release new realms.
+      raise ArgumentError, 'Unknown world server.' unless FFXIVLodestone::SERVER_SEARCH_INDEXES.key? world.downcase.to_sym 
+      doc = Nokogiri::HTML(get_search_html(name,FFXIVLodestone::SERVER_SEARCH_INDEXES[world.downcase.to_sym]))
+
+      # Results table should have two TRs if the search has found a unique character - 
+      # one TR for headers and one TR with the character info. If nothing was found, the
+      # resul table is not even present.
+      results = doc.search("table.contents-table1 tr th[contains('Character Name')]")
+      raise NotFoundException, 'Character search yielded no results.' if results.empty?
+      
+      results = results.last.parent.parent
+      raise AmbiguousNameError, 'Character search turned up multiple results.' if results.children.length > 2
+
+      return results.search('tr:last a').first.attr('href').gsub('/rc/character/top?cicuid=','') 
     end
   end # character
 end # end FFXIVLodestone

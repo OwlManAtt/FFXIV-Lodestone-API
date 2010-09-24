@@ -1,0 +1,1761 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+	<meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="content-Style-type" content="text/css" />
+	<meta http-equiv="content-Script-type" content="text/javascript" />
+
+	<link rel="shortcut icon" href="http://static.finalfantasyxiv.com/favicon.ico">
+
+	<link rel="stylesheet" type="text/css" href="http://static.finalfantasyxiv.com/global/css/basic.css?_v=4mk" /><link rel="stylesheet" type="text/css" href="http://static.finalfantasyxiv.com/global/css/common/default/base.css?_v=4mk" /><link rel="stylesheet" type="text/css" href="http://static.finalfantasyxiv.com/global/css/en/default/base.css?_v=4mk" /><link rel="stylesheet" type="text/css" href="http://static.finalfantasyxiv.com/community/css/common/default/base.css?_v=4mk" /><link rel="stylesheet" type="text/css" href="http://static.finalfantasyxiv.com/community/css/en/default/base.css?_v=4mk" /><script type="text/javascript" src="http://static.finalfantasyxiv.com/js/conf/init.js?_v=4mk"></script><script type="text/javascript">
+		var userToken    = '';
+	</script>
+	
+	<style type="text/css">
+			/* パラメータラベル */
+			.param-label {
+				height  : 18px;
+				padding : 0 0 0 20px;
+				background-repeat : no-repeat;
+				background-position : 1px 1px;
+			}
+			/* メインスキルラベル */
+			.mainskill-label {
+				height  : 36px;
+				background-repeat : no-repeat;
+				background-position : 1px 2px;
+			}
+			.paddingR {
+				padding-right : 5px;
+			}
+			
+			.profile-plate {
+				width  : 540px;
+				height : 230px;
+			}
+			#profile-plate0 {/* 未設定 */
+				background-image : url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/characterStatus/profilePlate/none.png);
+			}
+			#profile-plate1 {/* リムサロミンサ */
+				background-image : url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/characterStatus/profilePlate/limsa.png);
+			}
+			#profile-plate2 {/* グリダニア*/
+				background-image : url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/characterStatus/profilePlate/gridania.png);
+			}
+			#profile-plate3 {/* ウルダハ */
+				background-image : url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/characterStatus/profilePlate/uldah.png);
+			}
+			#charname {
+				height : 27px;
+			}
+				#charname div {
+					font-weight : bold;
+					padding : 5px 0 0 8px;
+				}
+			
+			#profile {
+				padding : 5px 0 0 7px;
+			}
+			
+			#profile-table {
+				margin : 0 0 0 5px;
+			}
+				#profile-table td {
+					color : #fff;
+					line-height : 140%;
+				}
+				#profile-table th {
+					color : #FFE97E;
+					font-weight : normal;
+					text-align : left;
+					line-height : 140%;
+				}
+			
+			.guard,.skill {
+				width  : 32px;
+				height : 32px;
+			}
+			/* 守護神 */
+			#guard1 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/halone.png)}
+			#guard2 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/menphina.png)}
+			#guard3 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/thaliak.png)}
+			#guard4 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/nymeia.png)}
+			#guard5 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/llymlaen.png)}
+			#guard6 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/oschon.png)}
+			#guard7 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/byregot.png)}
+			#guard8 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/rhalgr.png)}
+			#guard9 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/azeyma.png)}
+			#guard10 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/naldthal.png)}
+			#guard11 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/nophica.png)}
+			#guard12 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/guardian/althyk.png)}
+			
+			/* メインスキル */
+			#gla, #skill3 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/gladiator.png)}
+			#arc, #skill7 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/archer.png)}
+			#lnc, #skill8 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/lancer.png)}
+			#mrd, #skill4 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/marauder.png)}
+			#pgl, #skill2 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/pugilist.png)}
+			#thm, #skill22 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/thaumaturge.png)}
+			#con, #skill23 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/conjurer.png)}
+			#bsm, #skill30 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/blacksmith.png)}
+			#wvr, #skill34 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/weaver.png)}
+			#tan, #skill33 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/tanner.png)}
+			#min, #skill39 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/miner.png)}
+			#btn, #skill40 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/harvester.png)}
+			#crp, #skill29 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/carpenter.png)}
+			#arm, #skill31 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/armorer.png)}
+			#gld, #skill32 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/goldsmith.png)}
+			#fsh, #skill41 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/fisher.png)}
+			#cul, #skill36 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/culinarian.png)}
+			#alc, #skill35 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/alchemist.png)}
+			#snt, #skill10 {background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/mainskill/sentinel.png)}
+		</style>
+	<title>
+		FINAL FANTASY XIV, The Lodestone</title>
+
+</head>
+<body>
+
+<!-- #bg -->
+
+<div id="bg" class="character logout characterpage other">
+
+	<!-- #bg2 -->
+	<div id="bg2" class=" characterpage">
+	
+		<!-- #wrap -->
+		<div id="wrap">
+			
+			<!-- コーポレートヘッダー -->
+			<script type="text/javascript" src="http://static.finalfantasyxiv.com/global/js/mini/common/sqexheader.js?_v=4mk"></script><!-- #wrap-header -->
+			<div id="wrap-header">
+				
+				<form id="logoutForm" name="logoutForm" action="/rc/logout" method="POST" class="hide"><input type="hidden" name="_ut" value="" id="logoutForm__ut"/></form>
+
+
+
+<script type="text/javascript">
+					<!-- ログアウト -->
+					function toLogout() {
+						document.getElementById("logoutForm").submit();
+					};
+					
+					<!-- 現在のタイムゾーンID -->
+					var currentTimezoneID = 'CST';
+				</script>
+		
+				<div id="wrap-header-image">
+
+					<!-- ロゴ -->
+					<div id="wrap-header-logo"></div>
+					
+					<!-- ログインしている時だけログアウトボタンを表示 -->
+					<!-- タイムゾーンのクッキーが未設定の場合 -->
+					<!-- タイムゾーンポップアップ -->
+						<div id="timezonePopup">
+							<div id="timezonePopupMsg">
+								Current Time Zone:<br />(GMT-06:00) Central Time (US and Canada)</div>
+							<div id="timezonePopupBtn">
+								<a href="javascript:setCurrentTimeZone()" id="btSetTimezone" class="button" style="float:left"></a>
+								<a href="javascript:showTimeZoneWindow()" id="btChangeTimezone" class="button" style="float:left"></a>
+							</div>
+						</div><!-- タイムゾーンポップアップ -->
+					</div>
+					
+				<!-- 簡易検索エリア -->
+				<div id="wrap-header-news">
+					<form id="headerSearchForm" name="headerSearchForm" action="/rc/search/search" method="GET"><div id="simple-search">
+							<input type="text" name="q" maxlength="100" value="" id="simple-search-input" class=""/><a id="btSimpleSearch" class="button" href="javascript:;" onclick="document.getElementById('headerSearchForm').submit()"></a>
+							<a id="btSimpleSearchChara" class="button" href="/rc/search/characterForm"></a>
+						</div>
+					</form>
+
+
+
+<div class="floatEnd"></div>
+				</div><!-- 簡易検索エリア -->
+			</div><!-- #wrap-header -->
+				
+			<!-- #wrap-body -->
+			<div id="wrap-body">
+					
+				<!-- ======================================================================= -->
+				<!-- サイドメニュー                                                          -->
+				<!-- ======================================================================= -->
+				<!--◎◎◎
+					画面左に表示される縦のメニューです。内部で状態を切り替えられるようにしてください。
+					ログイン、ログアウト、マイページ、プレイヤーサイトなど
+				◎◎◎-->
+
+				<div id="menu">
+
+					<!-- ログインボタン -->
+						<div id="btLogin">
+							<a href="https://secure.finalfantasyxiv.com/rc/login" class="button"></a>
+						</div>
+					<div id="mainmenu">
+						<!-- プレイヤーズページトップへ -->
+						<div class="menu-lv1">
+							<a class="menu-btLv1" id="btMenuGotoPlayersTop" href="/pl/index.html"></a>
+						</div>
+						
+						<!-- メインメニュー生成開始 -->
+						<div class="menu-lv1">
+						<a class="menu-btLv1" id="btMenuInformation" href="/pl/news/information" target=""></a>
+					</div>
+				<!-- menu-lv1 -->
+					<div class="menu-lv1">
+						<a class="menu-btLv1-hasChild" id="btMenuGameStart" href="javascript:;"></a>
+						<!-- menu-lv1-body -->
+						<div class="menu-lv1-body">
+				<!-- menu-lv2 -->
+				<div class="menu-lv2">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/envi/envi01.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Required Specifications</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/envi/envi02.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Installation</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/envi/envi03.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Getting Ready</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/envi/envi04.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Fees & Options</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/envi/envi05.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Settings</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div><!-- menu-lv2 -->
+			</div><!-- menu-lv1-body -->
+					<div class="menu-lv1-footer"></div>
+				</div><!-- menu-lv1 -->
+			<!-- menu-lv1 -->
+					<div class="menu-lv1">
+						<a class="menu-btLv1-hasChild" id="btMenuPlayGuide" href="javascript:;"></a>
+						<!-- menu-lv1-body -->
+						<div class="menu-lv1-body">
+				<!-- menu-lv2 -->
+				<div class="menu-lv2">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2-hasChild" href="javascript:;">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Basic Controls</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/basis01.html">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Controlling Your Character</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/basis02.html">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Launching & Closing the Game</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2-hasChild" href="javascript:;">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Beginning the Game</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/start01.html">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Character Creation & World Selection</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/start02.html">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Getting Started</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/guide/gamescreen01.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">The Game Screen</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/guide/guildleave01.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Guildleves</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/guide/battle01.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Battle & Being KO'd</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2-hasChild" href="javascript:;">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Playing With Others</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/comm01.html">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Means of Communication</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/comm02.html">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Parties</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2-hasChild" href="javascript:;">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Synthesis</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Leatherworking</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=E&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Leatherworking Recipes<br>(Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=E&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Leatherworking Recipes<br>(Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=E&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Leatherworking Recipes<br>(Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Armoring</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=C&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Armorcraft Recipes<br>(Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=C&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Armorcraft Recipes<br>(Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=C&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Armorcraft Recipes<br>(Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Clothcraft</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=F&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Clothcraft Recipes (Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=F&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Clothcraft Recipes (Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=F&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Clothcraft Recipes (Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Blacksmithing</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=B&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Smithing Recipes (Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=B&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Smithing Recipes (Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=B&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Smithing Recipes (Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Goldsmithing</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=D&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Goldsmithing Recipes<br>(Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=D&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Goldsmithing Recipes<br>(Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=D&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Goldsmithing Recipes<br>(Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Woodworking</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=A&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Woodworking Recipes<br>(Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=A&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Woodworking Recipes<br>(Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=A&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Woodworking Recipes<br>(Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Cooking</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=H&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Cooking Recipes (Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=H&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Cooking Recipes (Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=H&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Cooking Recipes (Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx-hasChild" href="javascript:;">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Alchemy</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			<!-- menu-lvx -->
+				<div class="menu-lvx">
+					<div class="menu-lvx-header"></div>
+					<div class="menu-lvx-body">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=G&rankId=1">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Alchemy Recipes (Lv. 1-10)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=G&rankId=2">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Alchemy Recipes (Lv. 11-20)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLvx" href="/pl/guide/recipe.html?classId=G&rankId=3">
+						<div class="menu-btLvx-header"></div>
+						<div class="menu-btLvx-body">
+							<div class="menu-btLvx-inner">Alchemy Recipes (Lv. 21-30)</div>
+						</div>
+						<div class="menu-btLvx-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			</div>
+					<div class="menu-lvx-footer"></div>
+				</div><!-- menu-lvx -->		
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/guide/macro01.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Text Commands & Macros</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div><!-- menu-lv2 -->
+			</div><!-- menu-lv1-body -->
+					<div class="menu-lv1-footer"></div>
+				</div><!-- menu-lv1 -->
+			<!-- menu-lv1 -->
+					<div class="menu-lv1">
+						<a class="menu-btLv1-hasChild" id="btMenuDownload" href="javascript:;"></a>
+						<!-- menu-lv1-body -->
+						<div class="menu-lv1-body">
+				<!-- menu-lv2 -->
+				<div class="menu-lv2">
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/download/benchmark01.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Official Benchmark</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			<!-- menu-slide -->
+				<div class="menu-slide">
+					<a class="menu-btLv2" href="/pl/download/fansite01.html">
+						<div class="menu-btLv2-header"></div>
+						<div class="menu-btLv2-body">
+							<div class="menu-btLv2-inner">Fan Site Kit</div>
+						</div>
+						<div class="menu-btLv2-footer"></div>
+					</a>
+			</div><!-- menu-slide -->
+			</div><!-- menu-lv2 -->
+			</div><!-- menu-lv1-body -->
+					<div class="menu-lv1-footer"></div>
+				</div><!-- menu-lv1 -->
+			<div class="menu-lv1">
+						<a class="menu-btLv1" id="btMenuSupportEN" href="http://support.na.square-enix.com/main.php?id=902&la=1" target="_blank"></a>
+					</div>
+				<div class="menu-lv1">
+						<a class="menu-btLv1" id="btMenuRuleEN" href="http://support.jp.square-enix.com/rule.php?id=902&la=1" target="_blank"></a>
+					</div>
+				<div class="menu-lv1">
+						<a class="menu-btLv1" id="btMenuSqexAccountEN" href="https://secure.square-enix.com/account/app/svc/login?cont=account" target="_blank"></a>
+					</div>
+				</div>
+					
+					<div class="floatEnd"></div>
+					
+				</div><!-- menu -->
+				
+				<!-- ======================================================================= -->
+				<!-- //サイドメニュー                                                        -->
+				<!-- ======================================================================= -->
+
+				<!-- ======================================================================= -->
+				<!-- コンテナ                                                              -->
+				<!-- ======================================================================= -->
+				<!-- container -->
+				<div id="container">
+					
+					<!-- ======================================================================= -->
+					<!-- マイページメニュー ＆ログインキャラクター                                                 -->
+					<!-- ======================================================================= -->
+					<!-- ======================================================================= -->
+					<!-- ログインキャラクター -->
+					<!-- ======================================================================= -->
+					<!-- ======================================================================= -->
+					<!-- 非ログイン時にログインをうながすメッセージを表示する -->
+					<!-- ======================================================================= -->
+					<div id="unlessloginmenu-message"></div>
+					<!-- ======================================================================= -->
+					<!-- キャラクターページメニュー                                              -->
+					<!-- ======================================================================= -->
+					<!-- キャラクターページキャラネーム -->
+						<div id="charpage-charname">
+							<div id="charpage-charname-header"></div>
+							<div id="charpage-charname-body">
+								<!-- キャラ名 -->
+								<div id="charpage-charname-name">
+									<a href="/rc/character/top?cicuid=1502635">
+										Ayeron Lifebloom (Figaro)</a>
+								</div><!-- キャラ名 -->
+								
+								</div>
+							<div id="charpage-charname-footer"></div>
+						</div><!-- キャラクターページキャラネーム -->
+						
+						<!-- キャラクターページメニュー -->
+						<div id="charpagemenu">
+							<div id="charpagemenu-header"></div>
+							
+							<div id="charpagemenu-body">
+								<a id="btCMCharacter" class="btCM button floatLeft" href="/rc/character/status?cicuid=1502635"></a>
+								<a id="btCMDiary" class="btCM button floatLeft" href="/rc/diary/top?cicuid=1502635"></a>
+								<div id="lbCMFollow" class="btCM button floatLeft"></div>
+								<div class="floatEnd"></div>
+							</div>
+
+							<!-- ページガイド -->
+							<div class="contents-guide"><div></div></div>
+								
+							<div id="charpagemenu-footer"></div>
+						</div><!-- charpagemenu -->
+						
+					<!-- ======================================================================= -->
+					<!-- //マイページメニュー                                                    -->
+					<!-- ======================================================================= -->
+					<span class="hide" id="followLimitErrorText">You cannot follow more than 500 characters.</span>
+					<span class="hide" id="followErrorText">An unexpected error has occurred.</span>
+					
+					<!-- ======================================================================= -->
+					<!-- //キャラクターページメニュー                                            -->
+					<!-- ======================================================================= -->
+					
+					<!-- ======================================================================= -->
+					<!-- トピックパス                                            -->
+					<!-- ======================================================================= -->
+					
+					<div id="topicpath">
+	<div id="topicpath-header">
+		<div id="topicpath-guide"></div>
+	</div>
+	<div id="topicpath-body">
+		<div id="topicpath-patharea">
+			<!-- 開始タグ:現在のページ -->
+				<!-- 開始タグ:以前のページ -->
+				<div class="topicpath-past">
+				<a href="/rc/character/top?cicuid=1502635" class="" style="">Ayeron Lifebloom (Figaro)</a><!-- 終了タグ -->
+				</div>
+			<!-- 開始タグ:現在のページ -->
+				<div class="topicpath-current">
+				<!-- 開始タグ:以前のページ -->
+				Character Profile<!-- 終了タグ -->
+				</div>
+			<div class="floatEnd"></div>
+			</div>
+		</div>
+	<div id="topicpath-footer"></div>
+</div><!-- topicpath --><!-- topicPath -->
+
+					
+					<!-- ======================================================================= -->
+					<!-- //トピックパス                                            -->
+					<!-- ======================================================================= -->
+					
+					<!-- contents -->
+					<div id="contents">
+						<!-- 手書き編集エリア===================================================== -->
+
+						<!-- #contents-body -->
+	<div id="contents-body">
+	
+		<!-- #two-column-L -->
+		<div id="two-column-L">
+	
+			<!--=--------------------------------------------------------
+				Aゾーン
+			 ---------------------------------------------------------=-->
+			<!-- #azone -->
+			<div id="azone">
+				
+				<!-- #azone-contents -->
+				<div id="azone-contents">
+					
+					<!-- 見出し -->
+					<!-- .contents-headline -->
+					<div class="contents-headline">
+						<!-- .contents-headlineInner -->
+						<div class="contents-headlineInner">
+							<div class="contents-headlineHeader">
+								<div class="contents-headlineTL"></div>
+								<div class="contents-headlineTR"></div>
+							</div>
+							<div class="contents-headlineBody">
+								<div>Character Profile</div>
+							</div>
+							<div class="contents-headlineFooter">
+								<div class="contents-headlineBL"></div>
+								<div class="contents-headlineBR"></div>
+							</div>
+						</div><!-- .contents-headlineInner -->
+					</div><!-- .contents-headline -->
+
+					<!-- .contents-frame -->
+					<div class="contents-frame">
+						<!-- .contents-frame-lv1 -->
+						<div class="contents-frame-lv1">
+							<!-- .contents-frame-lv2 -->
+							<div class="contents-frame-lv2">
+									
+								<!-- .contents-frame-inner -->
+								<div class="contents-frame-inner">
+									
+										
+									<!-- プロフィール台紙 -->
+									<div class="profile-plate" id="profile-plate2">
+										<div id="charname">
+											<div>Ayeron Lifebloom (Figaro)</div>
+										</div>
+										<div id="profile">
+											<!-- キャラ画像 -->
+											<div class="image-mount floatLeft">
+												<div class="image-mount-image"><img src="http://static.finalfantasyxiv.com/csnap/1drdb_m_14e13bdee6f804fa6b989297ba747306.png?geepsvty" class=""/></div>
+												<div class="image-mount-frame"></div>
+											</div><!-- キャラ画像 -->
+											
+											<!--　情報表組み -->
+											<table id="profile-table" class="floatLeft" cellpadding="0" cellspacing="0">
+												<!-- 部族&民族 -->
+													<tr>
+														<td colspan="3">
+															Plainsfolk Male&nbsp;/&nbsp;Lalafell</td>
+													</tr>
+													<!-- メインスキル -->
+													<tr>
+														<!-- スキルアイコン -->
+														<td width="40"><div class="skill" id="skill40"></div></td>
+														<td colspan="2">
+															Botanist&nbsp;
+														</td>
+													</tr>
+													<!-- 誕生日 -->
+													<tr>
+														<!-- 守護神アイコン -->
+														<td rowspan="2"><div class="guard" id="guard3"></div></td>
+														<th width="120">Nameday:</th>
+														<td>
+															20th Sun of the 6th Umbral Moon</td>
+													</tr>
+													<!-- 守護神 -->
+													<tr>
+														<th>Guardian:</th>
+														<td>Thaliak, the Scholar</td>
+													</tr>
+													<!-- 開始都市 -->
+													<tr>
+														<td>&nbsp;</td>
+														<th>Starting City</th>
+														<td>Gridania</td>
+													</tr>
+												
+												<tr>
+														<td>&nbsp;</td>
+														<th>Physical Level</th>
+														<td>12</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+														<th>Experience Points</th>
+														<td>
+															13822&nbsp;/&nbsp;28000</td>
+													</tr>
+												<tr>
+														<td>&nbsp;</td>
+														<th>HP</th>
+														<td>
+															726&nbsp;(749)
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+														<th>MP</th>
+														<td>392&nbsp;(405)</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+														<th>TP</th>
+														<td>3000&nbsp;(3000)</td>
+													</tr>
+	
+												</table><!--　情報表組み -->
+											<div class="floatEnd"></div>
+										</div>
+									</div><!-- プロフィール台紙 -->
+
+									<!-- 自己紹介 -->
+									<!-- 自己紹介 -->
+									
+									<div style="margin-top:8px	">
+										<div class="floatLeft" style="width:268px">
+											
+												<div class="contents-subheader">
+													<div>Attributes</div>
+												</div>
+											
+												<table class="contents-table1" style="width:266px;margin-left:1px" cellspacing="1">
+													<!-- STR -->
+													<tr>
+														<th class="contents-table1TH1" width="50%">Strength</th>
+														<td class="contents-table1TD1" width="50%">13&nbsp;(13)</td>
+													</tr><!-- STR -->
+													
+													<!-- VIT -->
+													<tr>
+														<th class="contents-table1TH2">Vitality</th>
+														<td class="contents-table1TD2">40&nbsp;(40)</td>
+													</tr><!-- VIT -->
+													
+													<!-- DEX -->
+													<tr>
+														<th class="contents-table1TH1">Dexterity</th>
+														<td class="contents-table1TD1">17&nbsp;(18)</td>
+													</tr><!-- DEX -->
+													
+													<!-- INT -->
+													<tr>
+														<th class="contents-table1TH2">Intelligence</th>
+														<td class="contents-table1TD2">32&nbsp;(32)</td>
+													</tr>
+													<!-- INT -->
+													
+													<!-- MND -->
+													<tr>
+														<th class="contents-table1TH1">Mind</th>
+														<td class="contents-table1TD1">37&nbsp;(37)</td>
+													</tr><!-- MND -->
+													
+													<!-- PIE -->
+													<tr>
+														<th class="contents-table1TH2">Piety</th>
+														<td class="contents-table1TD2">18&nbsp;(18)</td>
+													</tr><!-- PIE -->
+												</table>
+											</div>	
+											
+											<div class="floatRight" style="width:268px">
+											
+												<div class="contents-subheader">
+													<div>Elements</div>
+												</div>
+											
+												<table class="contents-table1" style="width:266px;margin-left:1px" cellspacing="1">
+													
+													<tr>
+														<th class="contents-table1TH1" width="50%">
+															<div class="param-label" style="background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/param/fire.png);width:15px">
+																Fire</div>
+														</th>
+														<td class="contents-table1TD1" width="50%">
+															14&nbsp;(14)
+														</td>
+													</tr>
+													
+													<tr>
+														<th class="contents-table1TH2">
+															<div class="param-label" style="background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/param/water.png);width:15px">
+																Water</div>
+														</th>
+														<td class="contents-table1TD2">
+															15&nbsp;(15)
+														</td>
+													</tr>
+													
+													<tr>
+														<th class="contents-table1TH1">
+															<div class="param-label" style="background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/param/thunder.png);width:15px">
+																Lightning</div>
+														</th>
+														<td class="contents-table1TD1">
+															50&nbsp;(50)
+														</td>
+													</tr>
+													
+													<tr>
+														<th class="contents-table1TH2">
+															<div class="param-label" style="background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/param/wind.png);width:15px">
+																Wind</div>
+														</th>
+														<td class="contents-table1TD2">
+															15&nbsp;(15)
+														</td>
+													</tr>
+													
+													<tr>
+														<th class="contents-table1TH2">
+															<div class="param-label" style="background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/param/earth.png);width:15px">
+																Earth</div>
+														</th>
+														<td class="contents-table1TD2">
+															40&nbsp;(40)
+														</td>
+													</tr>
+													
+													<tr>
+														<th class="contents-table1TH1">
+															<div class="param-label" style="background-image:url(http://static.finalfantasyxiv.com/community/images/common/default/contents/character/icon/param/ice.png);width:15px">
+																Ice</div>
+														</th>
+														<td class="contents-table1TD1">
+															13&nbsp;(13)
+														</td>
+													</tr>
+													
+													
+													
+												</table>
+											</div>
+										
+											<div class="floatEnd"></div>
+											
+										</div>
+
+									
+									<div class="contents-subheader" style="margin-top:8px">
+										<div>Skills</div>
+									</div>
+									<table class="contents-table1" cellspacing="1">
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="pgl" width="33%">
+													<div style="margin-left:38px">Hand-to-Hand</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="gla" width="33%">
+													<div style="margin-left:38px">Sword</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="mrd" width="33%">
+													<div style="margin-left:38px">Axe</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="arc" width="33%">
+													<div style="margin-left:38px">Archery</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="lnc" width="33%">
+													<div style="margin-left:38px">Polearm</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="snt" width="33%">
+													<div style="margin-left:38px">Shield</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="thm" width="33%">
+													<div style="margin-left:38px">Thaumaturgy</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="con" width="33%">
+													<div style="margin-left:38px">Conjury</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>8</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>1328&nbsp;/&nbsp;3200</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="crp" width="33%">
+													<div style="margin-left:38px">Woodworking</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="bsm" width="33%">
+													<div style="margin-left:38px">Smithing</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="arm" width="33%">
+													<div style="margin-left:38px">Armorcraft</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="gld" width="33%">
+													<div style="margin-left:38px">Goldsmithing</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="tan" width="33%">
+													<div style="margin-left:38px">Leatherworking</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="wvr" width="33%">
+													<div style="margin-left:38px">Clothcraft</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>7</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>484&nbsp;/&nbsp;2300</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="alc" width="33%">
+													<div style="margin-left:38px">Alchemy</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="cul" width="33%">
+													<div style="margin-left:38px">Cooking</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="min" width="33%">
+													<div style="margin-left:38px">Mining</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH2" id="btn" width="33%">
+													<div style="margin-left:38px">Botany</div>
+												</th>
+												
+												<td class="contents-table1TD3" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>10</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD4">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>2471&nbsp;/&nbsp;5700</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										<tr>
+												<th class="mainskill-label contents-table1TH1" id="fsh" width="33%">
+													<div style="margin-left:38px">Fishing</div>
+												</th>
+												
+												<td class="contents-table1TD1" width="33%">
+														<table>
+															<tr>
+																<td>Rank</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+													<td width="33%" class="contents-table1TD2">
+														<table>
+															<tr>
+																<td>Skill Points</td>
+																<td width="8"></td>
+																<td>-</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+										</table>
+
+								</div><!-- .contents-frame-inner -->
+									
+							</div><!-- .contents-frame-lv2 -->
+						</div><!-- .contents-frame-lv1 -->
+					</div><!-- .contents-frame -->
+					
+				</div><!-- #azone-contents -->
+			</div><!-- #azone -->
+			<!--=--------------------------------------------------------
+				//Aゾーン
+			 ---------------------------------------------------------=-->
+	
+			<div id="outboundLinkMessage" class="hide">
+				You are now exiting the Lodestone.<br/>Proceed?<br/><br/><span class="window-text-note">*Square Enix cannot be held responsible for the content of website links posted on the Lodestone or any damage incurred by accessing these links.</span></div>
+			
+			<div class="floatEnd"></div>
+	
+		</div><!-- #one-column or #two-column-L -->
+		
+	</div><!-- #contents-body -->
+
+	<!-- //手書き編集エリア=================================================== -->
+						
+					</div><!-- contents -->
+
+				</div><!-- container -->
+
+				<!-- ======================================================================= -->
+				<!-- //コンテンツ                                                            -->
+				<!-- ======================================================================= -->
+			
+				<!-- フロート終了 -->
+				<div class="floatEnd"></div>
+
+	</div><!-- #wrap-body -->
+			
+			<!-- #wrap-footer -->
+			<div id="wrap-footer">
+				<div align="left" id="wrap-footer-bg">
+					<a class="button" id="btShowTimeZoneWindow" href="javascript:;"></a>
+					<div id="copyright"><div>&#xA9; 2010 SQUARE ENIX CO., LTD. All Rights Reserved.<br/>FINAL FANTASY, FFXIV, SQUARE ENIX and the SQUARE ENIX logo are registered trademarks or trademarks of Square Enix Holdings Co., Ltd. &quot;PlayStation&quot; and the &quot;PS&quot;<br/>Family logo are registered trademarks and &quot;PS3&quot; is a trademark of Sony Computer Entertainment Inc. The PlayStation Network Logo is a service mark of Sony Computer Entertainment Inc. The ESRB rating icon is a registered trademark of the Entertainment Software Association. All other trademarks are the properties of their respective owners.</div>
+	<table class="floatRight" cellpadding="0" cellspacing="0">
+		<tr>
+			<td><img src="http://static.finalfantasyxiv.com/global/images/common/default/wrap/footer/copyright/esrbrate.gif?_v=4mk"/></td>
+			<td width="30"></td>
+			<td><img src="http://static.finalfantasyxiv.com/global/images/common/default/wrap/footer/copyright/ps.gif?_v=4mk"/></td>
+			<td width="30"></td>
+			<td><img src="http://static.finalfantasyxiv.com/global/images/common/default/wrap/footer/copyright/ps3.gif?_v=4mk"/></td>
+			<td width="30"></td>
+			<td><img src="http://static.finalfantasyxiv.com/global/images/common/default/wrap/footer/copyright/psn.gif?_v=4mk"/></td>
+			<td width="30"></td>
+			<td><img src="http://static.finalfantasyxiv.com/global/images/common/default/wrap/footer/copyright/pcdvd.gif?_v=4mk"/></td>
+			<td width="30"></td>
+			<td><a href="http://www.square-enix.com/na/privacy/" target="_blank"><img src="http://static.finalfantasyxiv.com/global/images/common/default/wrap/footer/copyright/esrb.gif?_v=4mk"/></a></td>
+		</tr>
+	</table>
+</div>
+					<div class="floatEnd"></div>
+				</div>
+			</div><!-- #wrap-footer -->
+		</div><!-- #wrap -->
+	</div><!-- #bg2 -->
+</div><!-- #bg --></body>
+</html>
+<script type="text/javascript" src="http://static.finalfantasyxiv.com/global/js/mini/common/init.js?_v=4mk"></script><script type="text/javascript" src="http://static.finalfantasyxiv.com/community/js/mini/character/characterStatus.js?_v=4mk"></script><script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18627772-1']);
+  _gaq.push(['_setDomainName', '.finalfantasyxiv.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

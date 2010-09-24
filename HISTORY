@@ -1,3 +1,4 @@
 == 0.9.0 ==
 * SkillList#list() changed to SkillList#levelled().
+* Characters can be searched and loaded by name. See the README for directions on how to do this.
 * Refactored, many things now extend hash.
