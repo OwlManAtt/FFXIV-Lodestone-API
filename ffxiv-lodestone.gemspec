@@ -14,7 +14,9 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
 
   s.add_dependency('nokogiri',">= 1.4.3")
+  s.add_development_dependency('bacon')
+
  
-  s.files        = Dir.glob("{lib}/**/*") + %w(README)
+  s.files        = Dir.glob("{lib}/**/*") + Dir.glob("{test/**/*}") + %w(README)
   s.require_path = 'lib'
 end

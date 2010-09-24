@@ -42,14 +42,21 @@ Q. Hey, why doesn't this have HP / MP / TP? They're on the character profile pag
 A. Because those values change based on the currently equipped job. I don't think they're useful
    pieces of data. If you have a use case for them, please let me know and I will include them.
 
+== Contributing ==
+If you want to fool around with the source code, you can see if you've fucked everything up:
+
+  ffxiv-lodestone$ gem install bacon
+  ffxiv-lodestone$ cd test/
+  ffxiv-lodestone$ bacon spec.rb
+
 == TODO ==
-* Error handling (if you put in a crap char ID you'll get some cryptic Nokogiri errors)
 * Figure out what the fuck the stats in parenthesis mean and do something with them.
   * Currently, these are dropped on the floor because I don't know what they mean. The current
     theories include 'Base (with gear)' and 'Stat (with buffs)'.
 * Make SkillList implement enumerable.
 * Character search by name in the constructor. Pending Lodestone's character search not randomly
   omitting people.
+* RDoc shit.
 
 == Author, License, Etc ==
 Copyright owlmanatt <owlmanatt@gmail.com> 2010. The library is free to use, modify, redistribute, 

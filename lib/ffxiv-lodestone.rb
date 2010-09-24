@@ -4,7 +4,7 @@ require 'open-uri'
 require 'json'
 
 module FFXIVLodestone
-  VERSION = '0.8.0'
+  VERSION = '0.8.1'
 
   class Character
     class NotFoundException < RuntimeError 
@@ -136,7 +136,7 @@ module FFXIVLodestone
     def initialize(character_id)
       @character_id = character_id
 
-      doc = Nokogiri::HTML(open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{@character_id}", {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}))
+      doc = Nokogiri::HTML(get_html(@character_id))
 
       # Did we get an error page? Invalid ID, etc.
       if !((doc.search('head title').first.content.match /error/i) == nil)
@@ -203,6 +203,13 @@ module FFXIVLodestone
     def method_missing(method)
       return @profile[method] if @profile.key? method
       super
+    end
+
+    protected 
+
+    # This method can be redefined in a test class.
+    def get_html(id)
+      open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{id}", {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'})
     end
   end # character
 end # end FFXIVLodestone
