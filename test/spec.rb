@@ -49,7 +49,7 @@ describe 'Character(1015990)' do
   end
 
   it 'should list all leveled jobs' do
-    @char.skills.list.map(&:name).sort.should.equal ['Conjurer','Carpenter','Leatherworker','Weaver','Alchemist','Miner','Botanist','Fisher'].sort
+    @char.skills.levelled.map(&:name).sort.should.equal ['Conjurer','Carpenter','Leatherworker','Weaver','Alchemist','Miner','Botanist','Fisher'].sort
   end
 
   it 'should be convertable to json' do

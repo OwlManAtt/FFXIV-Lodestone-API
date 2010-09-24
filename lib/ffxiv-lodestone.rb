@@ -10,14 +10,20 @@ module FFXIVLodestone
     def to_yaml_properties
       serialize_properties.map {|sym| "@%s" % sym }
     end
+
     def to_hash
       serialize_properties.reduce(Hash.new) {|h,sym|
         h[sym] = self.send(sym)
         h
       }
     end
+
     def to_h
       to_hash
+    end
+
+    def to_json
+      self.to_hash.to_json
     end
   end
 
@@ -38,12 +44,11 @@ module FFXIVLodestone
       end
     end # StatList
 
-    class SkillList
+    class SkillList < Hash 
       class Skill
         include Serializable
 
         attr_reader :name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level
-
         def initialize(job,skill_name,rank,cur_sp,skillup_sp)
           @name = job 
           @skill_name = skill_name
@@ -108,32 +113,22 @@ module FFXIVLodestone
             levelup_sp = sp.split('/')[1].strip.to_i
           end
 
-          @skills[key] = Skill.new(job,name,rank,current_sp,levelup_sp)
+          self[key] = Skill.new(job,name,rank,current_sp,levelup_sp)
         end
       end # initialize
 
       # Lists all leveled jobs.
-      def list
-        list = []
-        @skills.each do |name,skill| 
-          list << skill if skill.rank > 0
+      def levelled 
+        self.keys.reduce(Array.new) do |a,key| 
+          a << self.send(key) if self.send(key).rank > 0
+          a
         end
-
-        return list
       end
 
-      def to_h
-        list = {}
-        @skills.each {|job,data| list[job] = data.to_h}
-
-        return list
-      end
-      
       def method_missing(method)
-        return @skills[method] if @skills.key? method
+        return self[method] if self.key? method
         super
       end
-
     end # FFXIVLodestone::Character::SkillList
 
     attr_reader :skills, :stats, :resistances, :profile
@@ -197,7 +192,7 @@ module FFXIVLodestone
     def to_json
       data = {}
       data.merge!(@profile)
-      data[:jobs] = @skills.to_h
+      data[:jobs] = @skills
       data[:attributes] = @stats
       data[:resistances] = @resistances
 
