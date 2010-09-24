@@ -1,3 +1,7 @@
+== 0.9.1 ==
+* Rails compatability! The #to_json() methods now take an argument (which is promptly dropped on
+  the floor) to make ActiveSupport happy.
+
 == 0.9.0 ==
 * SkillList#list() changed to SkillList#levelled().
 * Characters can be searched and loaded by name. See the README for directions on how to do this.

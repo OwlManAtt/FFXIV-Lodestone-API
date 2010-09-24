@@ -5,7 +5,7 @@ require 'json'
 
 module FFXIVLodestone
   # Gem version.
-  VERSION = '0.9.0'
+  VERSION = '0.9.1'
 
   # Accept-language must be sent; their default is Japanese text.
   HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}
@@ -54,7 +54,7 @@ module FFXIVLodestone
       to_hash
     end
 
-    def to_json
+    def to_json(args={})
       self.to_hash.to_json
     end
   end
@@ -223,7 +223,7 @@ module FFXIVLodestone
       "#{@profile[:first_name]} #{@profile[:last_name]}"
     end
 
-    def to_json
+    def to_json(args={})
       data = {}
       data.merge!(@profile)
       data[:jobs] = @skills
