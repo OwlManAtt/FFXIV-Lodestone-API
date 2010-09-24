@@ -6,38 +6,41 @@ require 'json'
 module FFXIVLodestone
   VERSION = '0.8.1'
 
+  module Serializable
+    def to_yaml_properties
+      serialize_properties.map {|sym| "@%s" % sym }
+    end
+    def to_hash
+      serialize_properties.reduce(Hash.new) {|h,sym|
+        h[sym] = self.send(sym)
+        h
+      }
+    end
+    def to_h
+      to_hash
+    end
+  end
+
   class Character
     class NotFoundException < RuntimeError 
     end
 
-    class StatList
-      include Enumerable 
-      attr_reader :stats
-
+    class StatList < Hash
       def initialize(table)
-        @stats = {}
-        
         table.search('tr').each do |tr|
-          @stats[tr.children[0].content.strip.downcase.to_sym] = tr.children[2].content.gsub("\302\240",' ').split(' ')[0].to_i
+          self[tr.children[0].content.strip.downcase.to_sym] = tr.children[2].content.gsub("\302\240",' ').split(' ')[0].to_i
         end
       end
 
-      def each
-        @stats.each {|stat| yield stat}
-      end
-
-      def to_h
-        @stats
-      end
-
-      def method_missing(method)
-        return @stats[method] if @stats.key? method
-        super
+      def stats
+	      self
       end
     end # StatList
 
     class SkillList
       class Skill
+        include Serializable
+
         attr_reader :name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level
 
         def initialize(job,skill_name,rank,cur_sp,skillup_sp)
@@ -48,9 +51,9 @@ module FFXIVLodestone
           @skillpoint_to_next_level = skillup_sp
         end # initalize
 
-        def to_h
-          {:name => @name, :skill_name => @skill_name, :rank => @rank, :current_skill_points => @current_skill_points, :skillpoint_to_next_level => @skillpoint_to_next_level}
-        end
+	def serialize_properties
+		[:name, :skill_name, :rank, :current_skill_points, :skillpoint_to_next_level]
+	end
       end # Skill
       
       # Alias the stupid names in Lodestone to class names. 
