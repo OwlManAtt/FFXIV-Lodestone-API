@@ -4,7 +4,7 @@ require 'open-uri'
 require 'json'
 
 module FFXIVLodestone
-  VERSION = '0.8.1'
+  VERSION = '0.9.0'
 
   module Serializable
     def to_yaml_properties
@@ -27,6 +27,9 @@ module FFXIVLodestone
     end
   end
 
+  # Represents an FFXIV character. Example:
+  #
+  #   FFXIVLodestone::Character.new(1015990)
   class Character
     class NotFoundException < RuntimeError 
     end
@@ -117,7 +120,7 @@ module FFXIVLodestone
         end
       end # initialize
 
-      # Lists all leveled jobs.
+      # Lists all leveled (rank > 0) jobs.
       def levelled 
         self.keys.reduce(Array.new) do |a,key| 
           a << self.send(key) if self.send(key).rank > 0
@@ -185,6 +188,7 @@ module FFXIVLodestone
       @profile[:clan] = race_line.join ' '
     end
     
+    # Returns first name / last name seperated by a space.
     def name
       "#{@profile[:first_name]} #{@profile[:last_name]}"
     end

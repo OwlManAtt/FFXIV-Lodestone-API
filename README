@@ -8,30 +8,38 @@ skills, of general pieces of profile data should automatically be handled by thi
 
 She ain't pretty, but it's decently robust. 
 
+== Installation ==
+It's easy:
+
+  $ gem install ffxiv-lodestone
+
+You can optinally install the json (pure or extension) gem to enable character.to_json.
+
 == Usage ==
 Take, for example, this character: <http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=1502635>
 
 To fire it up, call Character.new with the cicuid from that URL:
 
-  require 'ffxiv_lodestone'
+  require 'rubygems'
+  require 'ffxiv-lodestone'
   char = FFXIVLodestone::Character.new(1502635)
 
 Stuff you can do:
 
   char.to_json => String containing a JSON representation of the character / jobs.
+  char.to_yaml => YAML representation of the character (EXPERIMENTAL).
 
   char.name, char.world, char.nameday, char.guardian, char.starting_city, char.physical_level,
   char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan
 
   char.skills => SkillList with these methods:
-    .list => Array of all skills that have been leveled (ie rank 0 jobs omitted)
+    .levelled => Array of all skills that have been leveled (ie rank 0 jobs omitted)
     .pugilist (or any class name) => The skill, regardless of if its been leveled or not
               (ie you can explicitly ask for a skill to see if it's been leveled or not)
 
   char.resistances => StatList (same deal as stats but with fire instead of strength, 
                       see method list below)
   char.stats => StatList with these methods:
-    .each {} => Does some iteration
     .strength (or any stat name) => Integer value of the state
 
 A skill object has these methods: 
@@ -57,7 +65,3 @@ If you want to fool around with the source code, you can see if you've fucked ev
 * Character search by name in the constructor. Pending Lodestone's character search not randomly
   omitting people.
 * RDoc shit.
-
-== Author, License, Etc ==
-Copyright owlmanatt <owlmanatt@gmail.com> 2010. The library is free to use, modify, redistribute, 
-sell, or whatever. Go hog wild, just keep this license notice around.

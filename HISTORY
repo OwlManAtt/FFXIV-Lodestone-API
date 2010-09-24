@@ -1,0 +1,3 @@
+== 0.9.0 ==
+* SkillList#list() changed to SkillList#levelled().
+* Refactored, many things now extend hash.
