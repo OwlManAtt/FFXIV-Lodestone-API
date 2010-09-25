@@ -41,11 +41,30 @@ of these options of you will get an exception.
 
   3. Character search has no way of specifying that you want to search for an exact name. If you
      look up a character with a simple name, like 'Ab Lo', you get multiple search results. In the
-     event that the search has more than one result, an AmbiguousNameError will be raised. You will
-     have to request that character by the ID.
+     event that the search has more than one result, an AmbiguousNameError will be raised. You may
+     wish to use the search method and allow your user to pick the correct character, then load it
+     by ID, as demonstrated by this psuedo-code:
+
+    chars = FFXIVLodestone::Character.search(:name => 'Lady G', :world => 'Figaro')
+
+    if chars.length ==  1
+      char_id = chars.first[:id]
+    else
+      # display both on a screen for the user to pick, then load the right character by ID
+      char_id = . . .
+    end
+
+    character = FFXIVLodestone::Character.new(char_id)
 
 == Ghetto API Doc ==
-Stuff you can do:
+The static search method will return a list of hashes. You can use this to avoid ambiguious name
+errors. Each hash in the array will have id, name, world, and portrait_thumb_url.
+
+  results = Character.search(:name => 'Lady G', :world => 'Figaro')
+
+You can results.to_json or results.to_yaml this without any problems.
+
+Stuff you can do with a loaded character:
 
   char.to_json => String containing a JSON representation of the character / jobs.
   char.to_yaml => YAML representation of the character (EXPERIMENTAL).
@@ -63,8 +82,8 @@ Stuff you can do:
   char.stats => StatList with these methods:
     .strength (or any stat name) => Integer value of the state
 
-A skill object has these methods: 
-  name, skill_name, rank, skillpoint_to_next_level, current_skill_points
+  A skill object has these methods: 
+    name, skill_name, rank, skillpoint_to_next_level, current_skill_points
 
 == FAQ ==
 Q. Hey, why doesn't this have HP / MP / TP? They're on the character profile page!

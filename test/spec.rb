@@ -4,11 +4,11 @@ require 'ffxiv-lodestone'
 
 # Make the character class open our saved HTML...
 class FFXIVLodestone::Character
-  def get_profile_html(id)
+  def self.get_profile_html(id)
     open("./characters/#{id}.html")
   end
 
-  def get_search_html(character,world_id)
+  def self.get_search_html(character,world_id)
     n = character.downcase.gsub(' ','-')
     open("./searches/#{n}_#{world_id}.html")
   end
@@ -48,6 +48,7 @@ describe "Character(:name => 'Lady Simmons', :world => 'Selbina')" do
     char = FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom', :world => 'Figaro')
     char.name.should.equal 'Ayeron Lifebloom'
     char.character_id.should.equal 1502635
+    char.physical_level.should.equal 12
 
     char = FFXIVLodestone::Character.new(:id => 2172370)
     char.name.should.equal 'Karen Kranfel'
@@ -99,5 +100,26 @@ describe 'Character(1015990)' do
 LOLHEREDOC
 
     JSON.parse(@char.to_json).should.equal JSON.parse(json)
+  end
+end
+
+describe 'Character.search' do
+  it 'should raise an argument error' do
+    should.raise(ArgumentError) { FFXIVLodestone::Character.search() }  
+    should.raise(ArgumentError) { FFXIVLodestone::Character.search(:irrelevant_key => 'value') }  
+    should.raise(ArgumentError) { FFXIVLodestone::Character.search(:world => 'Figaro') }  
+    should.raise(ArgumentError) { FFXIVLodestone::Character.search(:name => 'Ayeron Lifebloom') }  
+    should.raise(ArgumentError) { FFXIVLodestone::Character.search(12345) }  
+    should.raise(ArgumentError) { FFXIVLodestone::Character.search(:name => 'Ayeron Lifebloom', :world => 'FAKE SERVER NAME') }  
+  end
+
+  it 'should be empty' do
+    FFXIVLodestone::Character.search(:name => 'ABLOO BLOO UGUU', :world => 'Selbina').should.equal([])
+  end
+
+  it 'should list characters' do
+    FFXIVLodestone::Character.search(:name => 'Lady', :world => 'Selbina').should.equal(
+      [{:world=>"Selbina", :portrait_thumb_url=>"http://static.finalfantasyxiv.com/csnap/v05m_ss_7bd793d507a92d2c415b306a83280d19.png?gediwpzz", :name=>"Lady Simmons", :id=>1015990}, {:world=>"Selbina", :portrait_thumb_url=>"http://static.finalfantasyxiv.com/csnap/14fij_ss_f19cd042628445e22a17a9362cb91f26.png?gee0yejc", :name=>"Shukick Fairlady", :id=>1195603}]
+    )
   end
 end

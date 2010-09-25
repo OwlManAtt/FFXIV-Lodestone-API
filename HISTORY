@@ -1,3 +1,7 @@
+== 0.9.2 ==
+* Added Character.search() method. It wraps the character search page; an array of hashes will
+  be returned with the resulting characters. 
+
 == 0.9.1 ==
 * Rails compatability! The #to_json() methods now take an argument (which is promptly dropped on
   the floor) to make ActiveSupport happy.

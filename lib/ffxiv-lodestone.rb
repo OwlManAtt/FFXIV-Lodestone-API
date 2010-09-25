@@ -152,21 +152,21 @@ module FFXIVLodestone
       unless args.class == Hash
         character_id = args
       else
+        raise ArgumentError, 'No search paremeters were given.' if args.empty?
+
         if args.key? :id
           character_id = args[:id]
-
           raise ArgumentError, 'No other arguments may be specified in conjunction with :id.' if args.size > 1
         else
-          if args.key? :name and args.key? :world
-            character_id = determine_character_id(args[:name],args[:world])
-          else
-            raise ArgumentError, 'Neither :id or :name && :world have been specified.'
-          end
+          characters = Character.search(args)
+          raise NotFoundException, 'Character search yielded no results.' if characters.empty?
+          raise AmbiguousNameError, 'Multiple characters matched that name.' if characters.size > 1
+          character_id = characters.first[:id]
         end
       end
       
       @character_id = character_id
-      doc = Nokogiri::HTML(get_profile_html(@character_id))
+      doc = Nokogiri::HTML(self.get_profile_html(@character_id))
 
       # Did we get an error page? Invalid ID, etc.
       if !((doc.search('head title').first.content.match /error/i) == nil)
@@ -217,6 +217,43 @@ module FFXIVLodestone
 
       @profile[:character_id] = @character_id.to_i
     end
+
+    # FFXIVLodestone::Character.search(:name => 'Character Name', :world => 'Server') => Array
+    def self.search(args={})
+      raise ArgumentError, 'Search parameters must be hash.' unless args.class == Hash
+      unless args.key? :name and args.key? :world
+        raise ArgumentError, ':name and :world must both be specified to perform a character search.'
+      end
+
+      # TODO This should be more robust ... somehow. The search page uses indexes assigned in 
+      # a dropdown and I just copied them in to a constant. It's going to fuck up if they 
+      # release new realms.
+      #
+      # perhaps take an ID or a string...? and don't validate the ID?
+      raise ArgumentError, 'Unknown world server.' unless FFXIVLodestone::SERVER_SEARCH_INDEXES.key? args[:world].downcase.to_sym 
+
+      world_id = FFXIVLodestone::SERVER_SEARCH_INDEXES[args[:world].downcase.to_sym] 
+      doc = Nokogiri::HTML(get_search_html(args[:name],world_id))
+
+      results = doc.search("table.contents-table1 tr th[contains('Character Name')]")
+      return [] if results.empty? # No results = no results table header. 
+      
+      # Skip index 0 - it's the header row and it's very different from the character <tr>s.
+      results = results.last.parent.parent
+      results.children.first.remove # discard the table headers
+
+      results.children.map do |tr|
+        char = {}
+
+        name_element = tr.search('td:first table tr td:last a').first
+        char[:name] = name = name_element.content.strip
+        char[:id] = name_element.attr('href').gsub('/rc/character/top?cicuid=','').strip.to_i
+        char[:portrait_thumb_url] = tr.search('td:first table tr td:first img').first.attr('src').strip
+        char[:world] = tr.search('td:last').last.content.strip
+
+        char
+      end
+    end # search
     
     # Returns first name / last name seperated by a space.
     def name
@@ -240,32 +277,13 @@ module FFXIVLodestone
 
     protected 
     # This method can be redefined in a test class.
-    def get_profile_html(id)
+    def self.get_profile_html(id)
       open("http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=#{id}", FFXIVLodestone::HTTP_OPTIONS)
     end
 
     # Another method to redefine in the test file...
-    def get_search_html(name,world_id)
+    def self.get_search_html(name,world_id)
       open(URI.encode("http://lodestone.finalfantasyxiv.com/rc/search/search?tgt=77&q=#{name}&cw=#{world_id}"), FFXIVLodestone::HTTP_OPTIONS)
-    end
-
-    def determine_character_id(name,world)
-      # TODO This should be more robust ... somehow. The search page uses indexes assigned in 
-      # a dropdown and I just copied them in to a constant. It's going to fuck up if they 
-      # release new realms.
-      raise ArgumentError, 'Unknown world server.' unless FFXIVLodestone::SERVER_SEARCH_INDEXES.key? world.downcase.to_sym 
-      doc = Nokogiri::HTML(get_search_html(name,FFXIVLodestone::SERVER_SEARCH_INDEXES[world.downcase.to_sym]))
-
-      # Results table should have two TRs if the search has found a unique character - 
-      # one TR for headers and one TR with the character info. If nothing was found, the
-      # resul table is not even present.
-      results = doc.search("table.contents-table1 tr th[contains('Character Name')]")
-      raise NotFoundException, 'Character search yielded no results.' if results.empty?
-      
-      results = results.last.parent.parent
-      raise AmbiguousNameError, 'Character search turned up multiple results.' if results.children.length > 2
-
-      return results.search('tr:last a').first.attr('href').gsub('/rc/character/top?cicuid=','') 
     end
   end # character
 end # end FFXIVLodestone
