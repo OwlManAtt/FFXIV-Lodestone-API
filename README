@@ -70,7 +70,8 @@ Stuff you can do with a loaded character:
   char.to_yaml => YAML representation of the character (EXPERIMENTAL).
 
   char.name, char.world, char.nameday, char.guardian, char.starting_city, char.physical_level,
-  char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan, char.character_id
+  char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan, char.character_id,
+  char.portrait_url, char.portrait_thumb_url
 
   char.skills => SkillList with these methods:
     .levelled => Array of all skills that have been leveled (ie rank 0 jobs omitted)
@@ -101,4 +102,4 @@ If you want to fool around with the source code, you can see if you've fucked ev
 * Figure out what the fuck the stats in parenthesis mean and do something with them.
   * Currently, these are dropped on the floor because I don't know what they mean. The current
     theories include 'Base (with gear)' and 'Stat (with buffs)'.
-* Get the portrait URL & biography field (if present).
+* Get the biography field (if its present).

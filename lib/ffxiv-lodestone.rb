@@ -5,7 +5,7 @@ require 'json'
 
 module FFXIVLodestone
   # Gem version.
-  VERSION = '0.9.1'
+  VERSION = '0.9.2'
 
   # Accept-language must be sent; their default is Japanese text.
   HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}
@@ -166,7 +166,7 @@ module FFXIVLodestone
       end
       
       @character_id = character_id
-      doc = Nokogiri::HTML(self.get_profile_html(@character_id))
+      doc = Nokogiri::HTML(Character.get_profile_html(@character_id))
 
       # Did we get an error page? Invalid ID, etc.
       if !((doc.search('head title').first.content.match /error/i) == nil)
@@ -214,6 +214,8 @@ module FFXIVLodestone
       race_line = race_line.first.split ' '
       @profile[:gender] = race_line.pop
       @profile[:clan] = race_line.join ' '
+
+      @profile.merge! generate_portrait_urls(doc.search('div.image-mount-image img').first.attr('src').strip)
 
       @profile[:character_id] = @character_id.to_i
     end
@@ -284,6 +286,19 @@ module FFXIVLodestone
     # Another method to redefine in the test file...
     def self.get_search_html(name,world_id)
       open(URI.encode("http://lodestone.finalfantasyxiv.com/rc/search/search?tgt=77&q=#{name}&cw=#{world_id}"), FFXIVLodestone::HTTP_OPTIONS)
+    end
+
+    def generate_portrait_urls(url)
+      url_list = {}
+
+      a = URI.parse(url)
+      a.query = nil
+      url_list[:portrait_url] = a.to_s
+
+      a.path = a.path.gsub(/\/([A-Z0-9]+)_m_/i,'/\1_ss_')
+      url_list[:portrait_thumb_url] = a.to_s
+
+      return url_list
     end
   end # character
 end # end FFXIVLodestone
