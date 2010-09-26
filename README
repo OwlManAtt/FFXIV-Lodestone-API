@@ -77,7 +77,7 @@ Stuff you can do with a loaded character:
   char.current_exp, char.exp_to_next_level, char.gender, char.race, char.clan, char.character_id,
   char.portrait_url, char.portrait_thumb_url
 
-  char.skills => SkillList with these methods:
+  char.jobs => SkillList with these methods:
     .levelled => Array of all skills that have been leveled (ie rank 0 jobs omitted)
     .pugilist (or any class name) => The skill, regardless of if its been leveled or not
               (ie you can explicitly ask for a skill to see if it's been leveled or not)

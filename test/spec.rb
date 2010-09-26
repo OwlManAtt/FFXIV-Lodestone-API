@@ -90,6 +90,9 @@ describe 'Character(1015990)' do
     @char.skills.carpenter.rank.should.equal 5
     @char.skills.carpenter.current_skill_points.should.equal 305 
     @char.skills.carpenter.skillpoint_to_next_level.should.equal 1500
+
+    # make sure the alias is working!
+    @char.jobs == @char.skills
   end
 
   it 'should list all leveled jobs' do

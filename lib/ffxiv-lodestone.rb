@@ -5,7 +5,7 @@ require 'json'
 
 module FFXIVLodestone
   # Gem version.
-  VERSION = '0.9.2'
+  VERSION = '0.9.3'
 
   # Accept-language must be sent; their default is Japanese text.
   HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}
@@ -145,6 +145,7 @@ module FFXIVLodestone
     end # FFXIVLodestone::Character::SkillList
 
     attr_reader :skills, :stats, :resistances, :profile
+    alias :jobs :skills
     def initialize(args={})
       unless args.class == Hash
         character_id = args

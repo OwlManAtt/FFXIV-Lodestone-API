@@ -1,5 +1,10 @@
 == 0.9.3 ==
 * Character.search() will now return up to 40 results; previously, it was only 20.
+* Character#skills now has an alias - #jobs. Sementically, char.jobs.carpenter makes more sense
+  than char.skills.carpenter - the skill name is carpentry.
+
+  They return exactly the same stuff, but #skills should be considered deprecated. I may replace it
+  with something else in the future.
 
 == 0.9.2 ==
 * Added Character.search() method. It wraps the character search page; an array of hashes will
