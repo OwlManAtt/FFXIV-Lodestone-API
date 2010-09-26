@@ -49,10 +49,7 @@ module FFXIVLodestone
         h
       }
     end
-
-    def to_h
-      to_hash
-    end
+    alias :to_h :to_hash # legacy API
 
     def to_json(args={})
       self.to_hash.to_json
@@ -245,15 +242,13 @@ module FFXIVLodestone
       results.children.first.remove # discard the table headers
 
       results.children.map do |tr|
-        char = {}
-
         name_element = tr.search('td:first table tr td:last a').first
-        char[:name] = name = name_element.content.strip
-        char[:id] = name_element.attr('href').gsub('/rc/character/top?cicuid=','').strip.to_i
-        char[:portrait_thumb_url] = tr.search('td:first table tr td:first img').first.attr('src').strip
-        char[:world] = tr.search('td:last').last.content.strip
-
-        char
+        {
+          :id => name_element.attr('href').gsub('/rc/character/top?cicuid=','').strip.to_i,
+          :name => name_element.content.strip,
+          :portrait_thumb_url => tr.search('td:first table tr td:first img').first.attr('src').strip,
+          :world => tr.search('td:last').last.content.strip
+        }
       end
     end # search
     
