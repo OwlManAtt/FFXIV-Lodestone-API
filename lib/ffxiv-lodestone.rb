@@ -3,6 +3,22 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
+# Nokogiri changes &nbsp; entities to \302\240. This may be OK in most instances,
+# but at the very least, it makes #inspect() look like shit, which is a headache
+# for people trying to troubleshoot.
+class String
+  def strip_nbsp
+    self.strip.gsub("\302\240",' ')
+  end
+
+  def strip_nbsp!
+    before = self.reverse.reverse
+    self.strip!
+    self.gsub!("\302\240",' ')
+    before == self ? nil : self
+  end
+end
+
 module FFXIVLodestone
   # Gem version.
   VERSION = '0.9.3'
@@ -69,7 +85,7 @@ module FFXIVLodestone
     class StatList < Hash
       def initialize(table)
         table.search('tr').each do |tr|
-          self[tr.children[0].content.strip.downcase.to_sym] = tr.children[2].content.gsub("\302\240",' ').split(' ')[0].to_i
+          self[tr.children[0].content.strip.downcase.to_sym] = tr.children[2].content.strip_nbsp.split(' ')[0].to_i
         end
       end
 
@@ -121,7 +137,7 @@ module FFXIVLodestone
             current_sp = 0
             levelup_sp = 0
           else
-            sp.gsub!("\302\240",'') # this is a &nbsp but it looks ugly in #inspect(), so remove it.
+            sp.strip_nbsp!
             current_sp = sp.split('/')[0].strip.to_i
             levelup_sp = sp.split('/')[1].strip.to_i
           end
@@ -147,20 +163,17 @@ module FFXIVLodestone
     attr_reader :skills, :stats, :resistances, :profile
     alias :jobs :skills
     def initialize(args={})
-      unless args.class == Hash
-        character_id = args
-      else
-        raise ArgumentError, 'No search paremeters were given.' if args.empty?
+      args = {:id => args} unless args.class == Hash
+      raise ArgumentError, 'No search paremeters were given.' if args.empty?
 
-        if args.key? :id
-          character_id = args[:id]
-          raise ArgumentError, 'No other arguments may be specified in conjunction with :id.' if args.size > 1
-        else
-          characters = Character.search(args)
-          raise NotFoundException, 'Character search yielded no results.' if characters.empty?
-          raise AmbiguousNameError, 'Multiple characters matched that name.' if characters.size > 1
-          character_id = characters.first[:id]
-        end
+      if args.key? :id
+        character_id = args[:id]
+        raise ArgumentError, 'No other arguments may be specified in conjunction with :id.' if args.size > 1
+      else
+        characters = Character.search(args)
+        raise NotFoundException, 'Character search yielded no results.' if characters.empty?
+        raise AmbiguousNameError, 'Multiple characters matched that name.' if characters.size > 1
+        character_id = characters.first[:id]
       end
       
       @character_id = character_id
@@ -181,7 +194,7 @@ module FFXIVLodestone
       profile = doc.search('#profile-plate2')
       profile.search('tr th').each do |th|
         key = th.content.strip.downcase.gsub(':','').gsub(' ','_').to_sym
-        value = th.next_sibling.next_sibling.content.strip.gsub("\302\240",'')
+        value = th.next_sibling.next_sibling.content.strip_nbsp
 
         # HP/MP/TP are max values. They depend on the currently equipped job and are not very
         # meaningful pieces of data. XP will be handled seperately. 
@@ -205,7 +218,7 @@ module FFXIVLodestone
       @profile[:last_name] = name_line[0].split(' ')[1]
 
       # Parse the "Seeker of the Sun Female / Miqo'te" line... fun~
-      race_line = profile.search('tr td').first.content.strip.gsub("\302\240",' ').split(' / ')
+      race_line = profile.search('tr td').first.content.strip_nbsp.split(' / ')
       @profile[:race] = race_line.pop
 
       # horrible array splitting and popping trix. hidoi hidoi!
@@ -225,23 +238,24 @@ module FFXIVLodestone
         raise ArgumentError, ':name and :world must both be specified to perform a character search.'
       end
 
-      # TODO This should be more robust ... somehow. The search page uses indexes assigned in 
-      # a dropdown and I just copied them in to a constant. It's going to fuck up if they 
-      # release new realms.
-      #
-      # perhaps take an ID or a string...? and don't validate the ID?
-      raise ArgumentError, 'Unknown world server.' unless FFXIVLodestone::SERVER_SEARCH_INDEXES.key? args[:world].downcase.to_sym 
+      # :world can be passed as a string ('Figaro') or as the integer used by the search page (7).
+      # This is so the library is not completely useless when new worlds are added - developers can
+      # fall back to the integers until the gem is updated.
+      if args[:world].class == String
+        raise ArgumentError, 'Unknown world server.' unless FFXIVLodestone::SERVER_SEARCH_INDEXES.key? args[:world].downcase.to_sym 
 
-      world_id = FFXIVLodestone::SERVER_SEARCH_INDEXES[args[:world].downcase.to_sym] 
+        world_id = FFXIVLodestone::SERVER_SEARCH_INDEXES[args[:world].downcase.to_sym] 
+      else
+        world_id = args[:world].to_i # force it to an int to prevent any funny business.
+      end
+
       doc = Nokogiri::HTML(get_search_html(args[:name],world_id))
-
       results = doc.search("table.contents-table1 tr th[contains('Character Name')]")
       return [] if results.empty? # No results = no results table header. 
       
-      # Skip index 0 - it's the header row and it's very different from the character <tr>s.
       results = results.last.parent.parent
       results.children.first.remove # discard the table headers
-
+      
       results.children.map do |tr|
         name_element = tr.search('td:first table tr td:last a').first
         {

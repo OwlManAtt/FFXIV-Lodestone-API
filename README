@@ -95,6 +95,17 @@ Q. Hey, why doesn't this have HP / MP / TP? They're on the character profile pag
 A. Because those values change based on the currently equipped job. I don't think they're useful
    pieces of data. If you have a use case for them, please let me know and I will include them.
 
+Q. I see you have a hard-coded list of server to ID mappings. That's awful! What am I supposed to
+   do when new servers open up?
+A. Yes, it is quite horrible! Hard-coding the list is less bad than doing another HTTP GET when
+   you use Character.search(), though.
+
+   But I've anticipated your problem. If new worlds open, you can just pass :world as the ID from
+   the search page's dropdown until I update the gem:
+
+     FFXIVLodestone::Character.search(:name => 'Ayeron Lifebloom', :world => 7)
+     FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom', :world => 7) 
+
 == Contributing ==
 If you want to fool around with the source code, you can see if you've fucked everything up:
 
@@ -106,4 +117,3 @@ If you want to fool around with the source code, you can see if you've fucked ev
 * Figure out what the fuck the stats in parenthesis mean and do something with them.
   * Currently, these are dropped on the floor because I don't know what they mean. The current
     theories include 'Base (with gear)' and 'Stat (with buffs)'.
-* Get the biography field (if its present).
