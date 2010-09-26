@@ -66,7 +66,7 @@ describe 'Character(invalid)' do
   end
 end
 
-describe "Character(:name => 'Lady Simmons', :world => 'Selbina')" do
+describe "Character.new(:name => foo, :world => bar)" do
   it 'should find the character' do
     char = FFXIVLodestone::Character.new(:name => 'Lady Simmons', :world => 'Selbina')
     char.name.should.equal 'Lady Simmons'
@@ -80,6 +80,14 @@ describe "Character(:name => 'Lady Simmons', :world => 'Selbina')" do
     char = FFXIVLodestone::Character.new(:id => 2172370)
     char.name.should.equal 'Karen Kranfel'
     char.character_id.should.equal 2172370
+
+    # This character started in LL. The page structure is slightly different than a Gridanian
+    # character. Why? So the top box can be red. :psyduck:
+    char = FFXIVLodestone::Character.new(:name => 'Ryoko Antihaijin', :world => 'Figaro')
+    char.name.should.equal 'Ryoko Antihaijin'
+    char.character_id.should.equal 1124548
+    char.starting_city.should.equal 'Limsa Lominsa'
+    char.jobs.thaumaturge.rank.should.equal 29 # pro-tier
   end
 end
 

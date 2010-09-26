@@ -21,7 +21,7 @@ end
 
 module FFXIVLodestone
   # Gem version.
-  VERSION = '0.9.3'
+  VERSION = '0.9.4'
 
   # Accept-language must be sent; their default is Japanese text.
   HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}
@@ -191,7 +191,7 @@ module FFXIVLodestone
       
       # The character info box at the top ... actually has a useful ID!
       @profile = {}
-      profile = doc.search('#profile-plate2')
+      profile = doc.search("//div[starts-with(@id,'profile-plate')]") 
       profile.search('tr th').each do |th|
         key = th.content.strip.downcase.gsub(':','').gsub(' ','_').to_sym
         value = th.next_sibling.next_sibling.content.strip_nbsp

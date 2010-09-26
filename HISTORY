@@ -1,3 +1,11 @@
+== 0.9.4 ==
+* Can load non-Gridanian characters now. I guess I'd never tested against a character that
+  started in Limsa or Uld - there's an ID that's different between the three so the top box can
+  be different colours. 
+
+  I am literally the worst developer ever and I apologize most profusely to everyone because holy
+  shit that's kind of a massive bug.
+
 == 0.9.3 ==
 * Character.search() will now return up to 40 results; previously, it was only 20.
 
