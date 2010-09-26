@@ -45,16 +45,20 @@ of these options of you will get an exception.
      wish to use the search method and allow your user to pick the correct character, then load it
      by ID, as demonstrated by this psuedo-code:
 
-    chars = FFXIVLodestone::Character.search(:name => 'Lady G', :world => 'Figaro')
+      chars = FFXIVLodestone::Character.search(:name => 'Lady G', :world => 'Figaro')
 
-    if chars.length ==  1
-      char_id = chars.first[:id]
-    else
-      # display both on a screen for the user to pick, then load the right character by ID
-      char_id = . . .
-    end
+      if chars.length ==  1
+        char_id = chars.first[:id]
+      else
+        # display both on a screen for the user to pick, then load the right character by ID
+        char_id = . . .
+      end
 
-    character = FFXIVLodestone::Character.new(char_id)
+      character = FFXIVLodestone::Character.new(char_id)
+
+    Caveat: This will only display the first page of search results (so maximum 40). If the
+    character name you are searching for is _that_ ambiguous, then just fucking delete it and
+    reroll with a sane name.
 
 == Ghetto API Doc ==
 The static search method will return a list of hashes. You can use this to avoid ambiguious name

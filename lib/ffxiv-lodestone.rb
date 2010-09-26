@@ -285,7 +285,7 @@ module FFXIVLodestone
 
     # Another method to redefine in the test file...
     def self.get_search_html(name,world_id)
-      open(URI.encode("http://lodestone.finalfantasyxiv.com/rc/search/search?tgt=77&q=#{name}&cw=#{world_id}"), FFXIVLodestone::HTTP_OPTIONS)
+      open(URI.encode("http://lodestone.finalfantasyxiv.com/rc/search/search?tgt=77&q=#{name}&cw=#{world_id}&num=40"), FFXIVLodestone::HTTP_OPTIONS)
     end
 
     def generate_portrait_urls(url)
