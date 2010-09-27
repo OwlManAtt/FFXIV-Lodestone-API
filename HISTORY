@@ -1,5 +1,6 @@
 == 0.9.5 ==
 * :world is no longer a required argument when loading by name and searching.
+* User agent is now 'ffxiv-lodestone-VER (Ruby/RUBY-VER)'.
 
 == 0.9.4 ==
 * Can load non-Gridanian characters now. I guess I'd never tested against a character that

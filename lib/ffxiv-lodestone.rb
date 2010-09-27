@@ -24,7 +24,8 @@ module FFXIVLodestone
   VERSION = '0.9.5'
 
   # Accept-language must be sent; their default is Japanese text.
-  HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}
+  HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5', 
+    'User-Agent' => "ffxiv-lodestone-#{FFXIVLodestone::VERSION} (Ruby/#{RUBY_VERSION})"}
   
   # Search page server IDs.
   SERVER_SEARCH_INDEXES = {:cornelia => 2, :kashuan => 3, :gysahl => 4, :mysidia => 5, 
