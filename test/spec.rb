@@ -93,6 +93,13 @@ describe "Character.new(:name => foo, :world => bar)" do
     char.starting_city.should.equal 'Limsa Lominsa'
     char.jobs.thaumaturge.rank.should.equal 29 # pro-tier
 
+    # For the sake of completeness, here's one that started in Ul'dah.
+    char = FFXIVLodestone::Character.new(:id => 2440978)
+    char.name.should.equal 'Warukyure Asura'
+    char.character_id.should.equal 2440978
+    char.world.should.equal 'Trabia'
+    char.starting_city.should.equal "Ul'dah"
+
     # Worldless!
     char = FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom')
     char.name.should.equal 'Ayeron Lifebloom'
