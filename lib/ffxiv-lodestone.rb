@@ -21,7 +21,7 @@ end
 
 module FFXIVLodestone
   # Gem version.
-  VERSION = '0.9.4'
+  VERSION = '0.9.5'
 
   # Accept-language must be sent; their default is Japanese text.
   HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5'}
@@ -234,19 +234,20 @@ module FFXIVLodestone
     # FFXIVLodestone::Character.search(:name => 'Character Name', :world => 'Server') => Array
     def self.search(args={})
       raise ArgumentError, 'Search parameters must be hash.' unless args.class == Hash
-      unless args.key? :name and args.key? :world
-        raise ArgumentError, ':name and :world must both be specified to perform a character search.'
-      end
+      raise ArgumentError, ':name must be specified to use search.' unless args.key? :name
 
-      # :world can be passed as a string ('Figaro') or as the integer used by the search page (7).
-      # This is so the library is not completely useless when new worlds are added - developers can
-      # fall back to the integers until the gem is updated.
-      if args[:world].class == String
-        raise ArgumentError, 'Unknown world server.' unless FFXIVLodestone::SERVER_SEARCH_INDEXES.key? args[:world].downcase.to_sym 
+      world_id = nil
+      if args.key? :world
+        # :world can be passed as a string ('Figaro') or as the integer used by the search page (7).
+        # This is so the library is not completely useless when new worlds are added - developers can
+        # fall back to the integers until the gem is updated.
+        if args[:world].class == String
+          raise ArgumentError, 'Unknown world server.' unless FFXIVLodestone::SERVER_SEARCH_INDEXES.key? args[:world].downcase.to_sym 
 
-        world_id = FFXIVLodestone::SERVER_SEARCH_INDEXES[args[:world].downcase.to_sym] 
-      else
-        world_id = args[:world].to_i # force it to an int to prevent any funny business.
+          world_id = FFXIVLodestone::SERVER_SEARCH_INDEXES[args[:world].downcase.to_sym] 
+        else
+          world_id = args[:world].to_i # force it to an int to prevent any funny business.
+        end
       end
 
       doc = Nokogiri::HTML(get_search_html(args[:name],world_id))

@@ -19,7 +19,6 @@ describe 'Character.search' do
     should.raise(ArgumentError) { FFXIVLodestone::Character.search() }  
     should.raise(ArgumentError) { FFXIVLodestone::Character.search(:irrelevant_key => 'value') }  
     should.raise(ArgumentError) { FFXIVLodestone::Character.search(:world => 'Figaro') }  
-    should.raise(ArgumentError) { FFXIVLodestone::Character.search(:name => 'Ayeron Lifebloom') }  
     should.raise(ArgumentError) { FFXIVLodestone::Character.search(12345) }  
     should.raise(ArgumentError) { FFXIVLodestone::Character.search(:name => 'Ayeron Lifebloom', :world => 'FAKE SERVER NAME') }  
   end
@@ -33,6 +32,11 @@ describe 'Character.search' do
 
   it 'should be empty' do
     FFXIVLodestone::Character.search(:name => 'ABLOO BLOO UGUU', :world => 'Selbina').should.equal([])
+  end
+  
+  it 'should allow no :world' do
+    should.not.raise(ArgumentError) { FFXIVLodestone::Character.search(:name => 'Ayeron Lifebloom')}
+    FFXIVLodestone::Character.search(:name => 'Ayeron Lifebloom').should.equal([{:portrait_thumb_url=>"http://static.finalfantasyxiv.com/csnap/1drdb_ss_14e13bdee6f804fa6b989297ba747306.png?geepsvty", :world=>"Figaro", :name=>"Ayeron Lifebloom", :id=>1502635}])
   end
 
   it 'should list characters' do
@@ -48,7 +52,6 @@ describe 'Character(invalid)' do
 
   it 'is a bad argument list' do
     should.raise(ArgumentError) { FFXIVLodestone::Character.new(:id => 1, :name => 'Ayeron Lifebloom', :world => 'Figaro') }
-    should.raise(ArgumentError) { FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom') }
     should.raise(ArgumentError) { FFXIVLodestone::Character.new(:world => 'Figaro') }
   end
 
@@ -63,6 +66,7 @@ describe 'Character(invalid)' do
   it 'should actually work' do
     should.not.raise(ArgumentError) { FFXIVLodestone::Character.new(:id => 1015990) }
     should.not.raise(ArgumentError) { FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom', :world => 'Figaro') }
+    should.not.raise(ArgumentError) { FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom') }
   end
 end
 
@@ -88,6 +92,12 @@ describe "Character.new(:name => foo, :world => bar)" do
     char.character_id.should.equal 1124548
     char.starting_city.should.equal 'Limsa Lominsa'
     char.jobs.thaumaturge.rank.should.equal 29 # pro-tier
+
+    # Worldless!
+    char = FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom')
+    char.name.should.equal 'Ayeron Lifebloom'
+    char.character_id.should.equal 1502635
+    char.world.should.equal 'Figaro'
   end
 end
 

@@ -64,7 +64,7 @@ of these options of you will get an exception.
 The static search method will return a list of hashes. You can use this to avoid ambiguious name
 errors. Each hash in the array will have id, name, world, and portrait_thumb_url.
 
-  results = Character.search(:name => 'Lady G', :world => 'Figaro')
+  results = Character.search(:name => 'Lady G', :world => 'Figaro') # :world is optional, by the way.
 
 You can results.to_json or results.to_yaml this without any problems.
 
@@ -117,3 +117,4 @@ If you want to fool around with the source code, you can see if you've fucked ev
 * Figure out what the fuck the stats in parenthesis mean and do something with them.
   * Currently, these are dropped on the floor because I don't know what they mean. The current
     theories include 'Base (with gear)' and 'Stat (with buffs)'.
+* Perhaps be able to page through #search() results instead of only having the first 40 available.
