@@ -1,3 +1,7 @@
+== 0.9.6 == 
+* User agent is now Mozilla Firefox's string. This is because Square Enix needs to be dragged
+  kicking and screaming in to 2010.
+
 == 0.9.5 ==
 * :world is no longer a required argument when loading by name and searching.
 * User agent is now 'ffxiv-lodestone-VER (Ruby/RUBY-VER)'.
