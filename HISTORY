@@ -1,3 +1,9 @@
+== 0.9.7 ==
+* 'Shield' has now been aliased to 'sentinel' for char#jobs(). Please be aware that the shield
+  key will no longer show up in a json'd character's job list - it will be sentinel instead.
+
+* Karnak added to the server name => search ID mapping.
+
 == 0.9.6 == 
 * User agent is now Mozilla Firefox's string. This is because Square Enix needs to be dragged
   kicking and screaming in to 2010.

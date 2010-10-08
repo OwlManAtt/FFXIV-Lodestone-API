@@ -21,7 +21,7 @@ end
 
 module FFXIVLodestone
   # Gem version.
-  VERSION = '0.9.6'
+  VERSION = '0.9.7'
 
   # Accept-language must be sent; their default is Japanese text.
   HTTP_OPTIONS = {'Accept-Language' => 'en-us,en;q=0.5', 'Accept-Charset' => 'utf-8;q=0.5', 
@@ -31,7 +31,7 @@ module FFXIVLodestone
   SERVER_SEARCH_INDEXES = {:cornelia => 2, :kashuan => 3, :gysahl => 4, :mysidia => 5, 
   :istory => 6, :figaro => 7, :wutai => 8, :trabia => 9, :lindblum => 10, :besaid => 11,
   :selbina => 12, :rabanastre => 13, :bodhum => 14, :melmond => 15, :palamecia => 16,
-  :saronia => 17, :fabul => 18}
+  :saronia => 17, :fabul => 18, :karnak => 19}
   
   # Alias the stupid names in Lodestone to class names. 
   SKILL_TO_CLASS = {
@@ -53,6 +53,7 @@ module FFXIVLodestone
     'Mining' => :miner,
     'Botany' => :botanist,
     'Fishing' => :fisher,
+    'Shield' => :sentinel,
   }
 
   module Serializable
