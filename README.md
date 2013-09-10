@@ -120,7 +120,9 @@ A skill object has these methods:
 * `skill_name`
 * `rank`
 * `skillpoint_to_next_level`
-* `current_skill_points`
+* `current_skill_points` 
+
+---
 
 ### FAQ
 **Q.** Hey, why doesn't this have HP / MP / TP? They're on the character profile page!
