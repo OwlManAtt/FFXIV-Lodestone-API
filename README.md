@@ -20,7 +20,7 @@ don't know of a way to specify an either-or (json-pure or json the native extens
 ### Usage
 Take, for example, [this character](http://lodestone.finalfantasyxiv.com/rc/character/status?cicuid=1502635).
 
-In its most simplistic instantiation, Character.new with the cicuid from that URL:
+In its most simplistic instantiation, `Character.new` with the cicuid from that URL:
 
 ```ruby
 require 'rubygems'
@@ -69,31 +69,57 @@ You can `results.to_json` or `results.to_yaml` this without any problems.
 
 Stuff you can do with a loaded character:
 
-`char.to_json` => String containing a JSON representation of the character / jobs.
-`char.to_yaml` => YAML representation of the character (EXPERIMENTAL).
+#### `char.to_json`
+String containing a JSON representation of the character / jobs.
 
-`char.name`, `char.world`, `char.nameday`, `char.guardian`, `char.starting_city`, `char.physical_level`,
-`char.current_exp`, `char.exp_to_next_level`, `char.gender`, `char.race`, `char.clan`, `char.character_id`,
-`char.portrait_url`, `char.portrait_thumb_url`
+#### `char.to_yaml`
+YAML representation of the character (EXPERIMENTAL).
 
-`char.jobs` => SkillList with these methods:
-  `.levelled` => Array of all skills that have been leveled (ie rank 0 jobs omitted)
-  `.pugilist` (or any class name) => The skill, regardless of if its been leveled or not (ie you can explicitly ask for a skill to see if it's been leveled or not)
+#### properties
+* `char.name`
+* `char.world`
+* `char.nameday`
+* `char.guardian`
+* `char.starting_city`
+* `char.physical_level`
+* `char.current_exp` 
+* `char.exp_to_next_level`
+* `char.gender`
+* `char.race`
+* `char.clan`
+* `char.character_id`
+* `char.portrait_url`
+* `char.portrait_thumb_url`
 
-`char.resistances` => StatList (same deal as stats but with fire instead of strength, see method list below)
+#### `char.jobs`
+##### `.levelled`
+Array of all skills that have been leveled (ie rank 0 jobs omitted)
+##### `.pugilist` (or any class name)
+The skill, regardless of if its been leveled or not (ie you can explicitly ask for a skill to see if it's been leveled or not)
 
-`char.stats` => StatList with these methods:
-  `.strength` (or any stat name) => Integer value of the state
+#### `char.resistances`
+StatList (same deal as stats but with fire instead of strength, see method list below)
 
-  A skill object has these methods: 
-    `name`, `skill_name`, `rank`, `skillpoint_to_next_level`, `current_skill_points`
+#### `char.stats`
+StatList with these methods:
+##### `.strength` (or any stat name)
+Integer value of the state
+
+A skill object has these methods: 
+* `name` 
+* `skill_name`
+* `rank`
+* `skillpoint_to_next_level`
+* `current_skill_points`
 
 ### FAQ
-Q. Hey, why doesn't this have HP / MP / TP? They're on the character profile page!
-A. Because those values change based on the currently equipped job. I don't think they're useful pieces of data. If you have a use case for them, please let me know and I will include them.
+**Q.** Hey, why doesn't this have HP / MP / TP? They're on the character profile page!
 
-Q. I see you have a hard-coded list of server to ID mappings. That's awful! What am I supposed to do when new servers open up?
-A. Yes, it is quite horrible! Hard-coding the list is less bad than doing another HTTP GET when you use Character.search(), though.
+**A.** Because those values change based on the currently equipped job. I don't think they're useful pieces of data. If you have a use case for them, please let me know and I will include them.
+
+**Q.** I see you have a hard-coded list of server to ID mappings. That's awful! What am I supposed to do when new servers open up?
+
+**A.** Yes, it is quite horrible! Hard-coding the list is less bad than doing another HTTP GET when you use Character.search(), though.
 
 But I've anticipated your problem. If new worlds open, you can just pass :world as the ID from the search page's dropdown until I update the gem:
 
@@ -106,9 +132,9 @@ FFXIVLodestone::Character.new(:name => 'Ayeron Lifebloom', :world => 7)
 If you want to fool around with the source code, you can see if you've fucked everything up:
 
 ```shell
-ffxiv-lodestone$ gem install bacon
-ffxiv-lodestone$ cd test/
-ffxiv-lodestone$ bacon spec.rb
+$ gem install bacon
+$ cd test/
+$ bacon spec.rb
 ```
 
 ### TODO
