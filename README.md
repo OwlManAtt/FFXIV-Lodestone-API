@@ -72,8 +72,12 @@ Stuff you can do with a loaded character:
 #### `char.to_json`
 String containing a JSON representation of the character / jobs.
 
+---
+
 #### `char.to_yaml`
 YAML representation of the character (EXPERIMENTAL).
+
+---
 
 #### properties
 * `char.name`
@@ -91,14 +95,20 @@ YAML representation of the character (EXPERIMENTAL).
 * `char.portrait_url`
 * `char.portrait_thumb_url`
 
+---
+
 #### `char.jobs`
 ##### `.levelled`
 Array of all skills that have been leveled (ie rank 0 jobs omitted)
 ##### `.pugilist` (or any class name)
 The skill, regardless of if its been leveled or not (ie you can explicitly ask for a skill to see if it's been leveled or not)
 
+---
+
 #### `char.resistances`
 StatList (same deal as stats but with fire instead of strength, see method list below)
+
+---
 
 #### `char.stats`
 StatList with these methods:
